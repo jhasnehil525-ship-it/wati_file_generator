@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WATI Report Generator</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/libphonenumber-js/1.10.51/libphonenumber-js.min.js"></script>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #13131a;
+    --surface2: #1c1c27;
+    --border: #2a2a3d;
+    --accent: #7c6aff;
+    --accent2: #ff6a9a;
+    --accent3: #6affcd;
+    --text: #e8e8f0;
+    --text2: #8888aa;
+    --text3: #5555777;
+    --success: #4ade80;
+    --warning: #fbbf24;
+    --error: #f87171;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(124,106,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124,106,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .glow-orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .glow-orb-1 { width: 600px; height: 600px; background: rgba(124,106,255,0.08); top: -200px; left: -100px; }
+  .glow-orb-2 { width: 400px; height: 400px; background: rgba(255,106,154,0.06); bottom: 100px; right: -100px; }
+
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Header */
+  header {
+    text-align: center;
+    margin-bottom: 48px;
+    animation: fadeDown 0.6s ease both;
+  }
+
+  .logo-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, rgba(124,106,255,0.15), rgba(106,255,205,0.1));
+    border: 1px solid rgba(124,106,255,0.3);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent3);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .logo-badge::before { content: '◈'; font-size: 10px; }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(28px, 5vw, 46px);
+    font-weight: 800;
+    line-height: 1.1;
+    background: linear-gradient(135deg, #e8e8f0 0%, #7c6aff 50%, #ff6a9a 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+  }
+
+  .subtitle {
+    color: var(--text2);
+    font-size: 15px;
+    font-weight: 300;
+    letter-spacing: 0.3px;
+  }
+
+  /* Steps */
+  .steps-nav {
+    display: flex;
+    gap: 0;
+    margin-bottom: 40px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 6px;
+    animation: fadeUp 0.6s 0.1s ease both;
+    overflow-x: auto;
+  }
+
+  .step-pill {
+    flex: 1;
+    min-width: 80px;
+    text-align: center;
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text2);
+    transition: all 0.2s;
+    cursor: default;
+    white-space: nowrap;
+  }
+  .step-pill.active {
+    background: linear-gradient(135deg, rgba(124,106,255,0.25), rgba(124,106,255,0.1));
+    color: var(--accent);
+    border: 1px solid rgba(124,106,255,0.3);
+  }
+  .step-pill.done {
+    color: var(--accent3);
+  }
+  .step-pill.done::before { content: '✓ '; }
+
+  /* Cards */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    margin-bottom: 20px;
+    animation: fadeUp 0.5s ease both;
+    transition: border-color 0.3s;
+  }
+  .card:hover { border-color: rgba(124,106,255,0.3); }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+
+  .step-num {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, rgba(124,106,255,0.3), rgba(255,106,154,0.2));
+    border: 1px solid rgba(124,106,255,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .card-subtitle {
+    font-size: 12px;
+    color: var(--text2);
+    margin-top: 2px;
+  }
+
+  /* Form elements */
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text2);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    font-family: 'DM Mono', monospace;
+  }
+  label .req { color: var(--accent2); margin-left: 3px; }
+
+  input, select, textarea {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    padding: 11px 14px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    width: 100%;
+    -webkit-appearance: none;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(124,106,255,0.12);
+  }
+  input::placeholder { color: var(--text2); opacity: 0.5; }
+  select option { background: var(--surface2); }
+
+  /* File upload */
+  .file-drop {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 32px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    background: rgba(124,106,255,0.02);
+  }
+  .file-drop:hover, .file-drop.dragover {
+    border-color: var(--accent);
+    background: rgba(124,106,255,0.06);
+  }
+  .file-drop input[type=file] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: none;
+    background: none;
+  }
+  .file-icon { font-size: 32px; margin-bottom: 10px; display: block; }
+  .file-label { font-size: 14px; color: var(--text2); }
+  .file-label span { color: var(--accent); font-weight: 500; }
+  .file-name {
+    margin-top: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--accent3);
+  }
+
+  /* Zoom/Webinar group config */
+  .groups-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  .group-row {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .group-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--accent);
+    background: rgba(124,106,255,0.12);
+    border: 1px solid rgba(124,106,255,0.2);
+    border-radius: 6px;
+    padding: 4px 10px;
+    text-align: center;
+  }
+
+  .toggle-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--text2);
+    margin-bottom: 10px;
+    user-select: none;
+  }
+  .toggle {
+    width: 36px;
+    height: 20px;
+    background: var(--border);
+    border-radius: 100px;
+    position: relative;
+    transition: background 0.2s;
+    flex-shrink: 0;
+  }
+  .toggle::after {
+    content: '';
+    width: 14px;
+    height: 14px;
+    background: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    transition: transform 0.2s;
+  }
+  input[type=checkbox]:checked + .toggle { background: var(--accent); }
+  input[type=checkbox]:checked + .toggle::after { transform: translateX(16px); }
+  input[type=checkbox] { display: none; }
+
+  .diff-input { display: none; margin-top: 10px; }
+  .diff-input.show { display: block; }
+
+  /* Generate button */
+  .generate-btn {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--accent), #9d4edd);
+    border: none;
+    border-radius: var(--radius);
+    color: white;
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+    margin-top: 8px;
+  }
+  .generate-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(124,106,255,0.35);
+  }
+  .generate-btn:active { transform: translateY(0); }
+  .generate-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  .generate-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .generate-btn:hover::before { opacity: 1; }
+
+  /* Progress */
+  .progress-bar-wrap {
+    background: var(--surface2);
+    border-radius: 100px;
+    height: 6px;
+    margin-top: 16px;
+    overflow: hidden;
+    display: none;
+  }
+  .progress-bar-wrap.show { display: block; }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent3));
+    border-radius: 100px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+
+  /* Status / Logs */
+  .log-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.8;
+    max-height: 220px;
+    overflow-y: auto;
+    display: none;
+    margin-top: 16px;
+  }
+  .log-box.show { display: block; }
+  .log-line { display: flex; gap: 10px; }
+  .log-line .tag-ok { color: var(--success); }
+  .log-line .tag-info { color: var(--accent); }
+  .log-line .tag-warn { color: var(--warning); }
+  .log-line .tag-err { color: var(--error); }
+
+  /* Results */
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+    margin-top: 16px;
+  }
+
+  .result-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    animation: pop 0.3s ease both;
+  }
+
+  .result-group-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--accent);
+  }
+  .result-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .result-label { font-size: 11px; color: var(--text2); }
+
+  .dl-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 9px 14px;
+    background: rgba(106,255,205,0.1);
+    border: 1px solid rgba(106,255,205,0.25);
+    border-radius: var(--radius-sm);
+    color: var(--accent3);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    margin-top: 4px;
+  }
+  .dl-btn:hover {
+    background: rgba(106,255,205,0.18);
+    border-color: rgba(106,255,205,0.5);
+  }
+
+  .dl-all-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, rgba(106,255,205,0.15), rgba(124,106,255,0.1));
+    border: 1px solid rgba(106,255,205,0.3);
+    border-radius: var(--radius);
+    color: var(--accent3);
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 16px;
+    display: none;
+  }
+  .dl-all-btn.show {
+    display: block;
+    animation: fadeUp 0.4s ease both;
+  }
+  .dl-all-btn:hover {
+    background: linear-gradient(135deg, rgba(106,255,205,0.25), rgba(124,106,255,0.2));
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(106,255,205,0.15);
+  }
+
+  /* Wati sample download */
+  .sample-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--accent);
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+    text-decoration: none;
+    border: 1px solid rgba(124,106,255,0.3);
+    padding: 5px 12px;
+    border-radius: 6px;
+    transition: all 0.2s;
+    cursor: pointer;
+    background: rgba(124,106,255,0.07);
+    margin-top: 10px;
+  }
+  .sample-link:hover { background: rgba(124,106,255,0.15); }
+
+  /* Animations */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pop {
+    from { opacity: 0; transform: scale(0.92); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .hint {
+    font-size: 11px;
+    color: var(--text2);
+    margin-top: 4px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .separator {
+    height: 1px;
+    background: var(--border);
+    margin: 24px 0;
+  }
+
+  .tag-badge {
+    display: inline-block;
+    background: rgba(124,106,255,0.12);
+    border: 1px solid rgba(124,106,255,0.2);
+    border-radius: 4px;
+    padding: 1px 7px;
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    color: var(--accent);
+    margin-right: 4px;
+  }
+
+  .section-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 8px 0 20px;
+    color: var(--text2);
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .section-divider::before, .section-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  #groupsSection { display: none; }
+  #resultsSection { display: none; }
+
+  .alert {
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    margin-top: 12px;
+    display: none;
+  }
+  .alert.error { background: rgba(248,113,113,0.1); border: 1px solid rgba(248,113,113,0.3); color: var(--error); display: block; }
+  .alert.success { background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.3); color: var(--success); display: block; }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--surface); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+</style>
+</head>
+<body>
+
+<div class="glow-orb glow-orb-1"></div>
+<div class="glow-orb glow-orb-2"></div>
+
+<div class="container">
+
+  <!-- Header -->
+  <header>
+    <div class="logo-badge">WATI Report Generator</div>
+    <h1>Payment → WATI CSV</h1>
+    <p class="subtitle">Automate your batch group assignment & WATI file generation</p>
+  </header>
+
+  <!-- Step 1: Funnel & Workshop Info -->
+  <div class="card" style="animation-delay:0.1s">
+    <div class="card-header">
+      <div class="step-num">1</div>
+      <div>
+        <div class="card-title">Funnel & Workshop Details</div>
+        <div class="card-subtitle">Select course funnel and set workshop schedule</div>
+      </div>
+    </div>
+
+    <div class="form-row" style="margin-bottom:16px">
+      <div class="field">
+        <label>Funnel / Course <span class="req">*</span></label>
+        <select id="funnelSelect" onchange="onFunnelChange()">
+          <option value="">— Select a funnel —</option>
+          <option value="Python">Python</option>
+          <option value="SQL">SQL</option>
+          <option value="DRF">DRF</option>
+          <option value="AI">AI</option>
+          <option value="Excel">Excel</option>
+          <option value="SMAI">SMAI</option>
+          <option value="CAW">CAW</option>
+          <option value="PBI">PBI</option>
+        </select>
+        <div class="hint" id="slugHint"></div>
+      </div>
+      <div class="field">
+        <label>Workshop Date <span class="req">*</span></label>
+        <input type="text" id="workshopDate" placeholder="e.g. 8th March" />
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="field">
+        <label>Workshop Time <span class="req">*</span></label>
+        <input type="text" id="workshopTime" placeholder="e.g. 11:00 AM" />
+      </div>
+      <div class="field">
+        <label>Default WA Group Name <span class="req">*</span></label>
+        <input type="text" id="defaultGroupName" placeholder="e.g. March-8th-Python-GX" oninput="onGroupNameChange()" />
+        <div class="hint">Use GX as placeholder — auto-replaced per group</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 2: Files -->
+  <div class="card" style="animation-delay:0.2s">
+    <div class="card-header">
+      <div class="step-num">2</div>
+      <div>
+        <div class="card-title">Upload Files</div>
+        <div class="card-subtitle">Payment report CSV and batch change sheet CSV</div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="field">
+        <label>Payment Report CSV <span class="req">*</span></label>
+        <div class="file-drop" id="paymentDrop">
+          <input type="file" accept=".csv" id="paymentFile" onchange="onFileSelect('payment')" />
+          <span class="file-icon">📊</span>
+          <div class="file-label"><span>Choose file</span> or drag & drop</div>
+          <div class="file-name" id="paymentFileName"></div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Batch Change Sheet CSV <span class="req">*</span></label>
+        <div class="file-drop" id="batchDrop">
+          <input type="file" accept=".csv" id="batchFile" onchange="onFileSelect('batch')" />
+          <span class="file-icon">📋</span>
+          <div class="file-label"><span>Choose file</span> or drag & drop</div>
+          <div class="file-name" id="batchFileName"></div>
+        </div>
+        <a class="sample-link" onclick="downloadSampleBatch()">⬇ Download sample batch CSV</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3: Groups Config (auto-populated) -->
+  <div class="card" id="groupsSection" style="animation-delay:0.3s">
+    <div class="card-header">
+      <div class="step-num">3</div>
+      <div>
+        <div class="card-title">Group Configuration</div>
+        <div class="card-subtitle">Zoom link & Webinar ID per group (optional)</div>
+      </div>
+    </div>
+
+    <div class="form-row" style="margin-bottom:20px">
+      <div class="field">
+        <label>Default Zoom Link</label>
+        <input type="text" id="defaultZoomLink" placeholder="https://zoom.us/j/..." />
+      </div>
+      <div class="field">
+        <label>Default Webinar ID</label>
+        <input type="text" id="defaultWebinarId" placeholder="e.g. 123 456 7890" />
+      </div>
+    </div>
+
+    <div class="section-divider">Per-Group Overrides</div>
+    <div class="groups-container" id="groupsContainer"></div>
+  </div>
+
+  <!-- Generate -->
+  <div class="card" style="animation-delay:0.4s">
+    <div class="card-header">
+      <div class="step-num">4</div>
+      <div>
+        <div class="card-title">Generate WATI Files</div>
+        <div class="card-subtitle">Process and download one CSV per group</div>
+      </div>
+    </div>
+
+    <div id="alertBox"></div>
+
+    <button class="generate-btn" onclick="generate()" id="genBtn">
+      ⚡ Generate WATI CSVs
+    </button>
+
+    <div class="progress-bar-wrap" id="progressWrap">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <div class="log-box" id="logBox"></div>
+  </div>
+
+  <!-- Results -->
+  <div class="card" id="resultsSection" style="animation-delay:0.1s">
+    <div class="card-header">
+      <div class="step-num">✓</div>
+      <div>
+        <div class="card-title">Download Results</div>
+        <div class="card-subtitle">One WATI CSV generated per group</div>
+      </div>
+    </div>
+    <div class="results-grid" id="resultsGrid"></div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;">
+      <button class="dl-all-btn" id="dlAllBtn" onclick="downloadAll()" style="flex:1;min-width:200px;">⬇ Download All CSVs as ZIP</button>
+      <button class="dl-all-btn" id="dlCombinedBtn" onclick="downloadCombined()" style="flex:1;min-width:200px;background:linear-gradient(135deg,rgba(255,106,154,0.15),rgba(124,106,255,0.1));border-color:rgba(255,106,154,0.3);color:var(--accent2);">⬇ Download Combined CSV</button>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+
+// ─── Slug Maps ───────────────────────────────────────────────────────────────
+const SLUGS = {
+  Python: [
+    'at01-hm','python-using-ai-workshop-ga2','python-using-ai-workshop-ga4',
+    'at01','python-using-ai-workshop-ga2b','python-using-ai-workshop-ga1b',
+    'python-using-ai-workshop-fb2','python-using-ai-workshop-ga1','at01-fb3',
+    'python-using-ai-workshop-ga5','python-using-ai-workshop-fb1b','at01-fb4',
+    'at01-ga3','python-using-ai-workshop-fb5'
+  ],
+  Excel: [
+    'excel-workshop-hm','excel-workshop','excel-workshop-fb1b','excel-workshop-ga',
+    'excel-using-ai-workshop-ga1b','excel-using-ai-workshop-fb2','excel-using-ai-workshop-fb3',
+    'excel-using-ai-workshop-fb4','excel-using-ai-workshop-ga4','excel-using-ai-workshop-fb4',
+    'excel-using-ai-workshop-ga5'
+  ],
+  PBI: [
+    'powerbi-mastery-hm','powerbi-mastery-fb1','powerbi-mastery-ga1','powerbi-mastery-fb2',
+    'powerbi-mastery-ga2','powerbi-mastery-2d-fb2','powerbi-mastery-pr','powerbi-mastery-af',
+    'powerbi-mastery-ga5','powerbi-mastery-fb1h','powerbi-mastery-fb3','powerbi-mastery-ga3',
+    'powerbi-mastery-fb4'
+  ],
+  DRF: [
+    'personal-finance-hm','personal-finance-fb1','personal-finance-fb2',
+    'personal-finance-ga1','personal-finance-ga2','personal-finance-ga4-25',
+    'personal-finance-1d-ga5'
+  ],
+  CAW: [
+    '5-day-cricket-analytics-workshop-hm','5-day-cricket-analytics-workshop-fb',
+    '5-day-cricket-analytics-workshop-ga'
+  ],
+  SQL: ['sqlai-fb1','sqlai-ga1','sqlai-ga2'],
+  AI: [
+    'ai-tools-workshop-fb15','ai-tools-workshop-fb6','ai-tools-workshop-hindi-ga',
+    'ai-tools-workshop-ga13','ai-tools-workshop-ga7','ai-tools-workshop',
+    'ai-tools-workshop-fb2','ai-tools-workshop-ga6','ai-tools-workshop-fb14',
+    'ai-tools-workshop-hm','ai-tools-workshop-ga10','ai-tools-workshop-ga14',
+    'ai-tools-workshop-ga-r3','ai-tools-workshop-in-fb25','ai-tools-workshop-fb-r4',
+    'ai-tools-workshop-fb9','ai-tools-workshop-fb4b','ai-tools-workshop-fb6b',
+    'ai-tools-workshop-ga14b','ai-tools-workshop-ga9','ai-tools-workshop-fb7'
+  ],
+  SMAI: []
+};
+
+// ─── State ────────────────────────────────────────────────────────────────────
+let detectedGroups = [];
+let generatedFiles = {};
+
+// ─── UI Helpers ───────────────────────────────────────────────────────────────
+function onFunnelChange() {
+  const f = document.getElementById('funnelSelect').value;
+  const slugs = SLUGS[f] || [];
+  const hint = document.getElementById('slugHint');
+  if (slugs.length) {
+    hint.innerHTML = `${slugs.length} slugs: ` + slugs.slice(0,3).map(s=>`<span class="tag-badge">${s}</span>`).join('') + (slugs.length>3 ? `<span class="tag-badge">+${slugs.length-3} more</span>` : '');
+  } else {
+    hint.innerHTML = f === 'SMAI' ? '<span style="color:var(--warning)">No slugs configured yet</span>' : '';
+  }
+}
+
+function onFileSelect(type) {
+  const fileInput = document.getElementById(type === 'payment' ? 'paymentFile' : 'batchFile');
+  const nameEl = document.getElementById(type === 'payment' ? 'paymentFileName' : 'batchFileName');
+  if (fileInput.files[0]) {
+    nameEl.textContent = '📎 ' + fileInput.files[0].name;
+    if (type === 'batch') parseBatchForGroups();
+  }
+}
+
+function onGroupNameChange() {
+  if (detectedGroups.length) renderGroupsUI();
+}
+
+// ─── Normalize label text for matching (removes spaces, punctuation, lowercases) ──
+function normalizeLabel(str) {
+  return str.toLowerCase()
+    .replace(/\b(\d+)(st|nd|rd|th)\b/g, '$1') // "8th" → "8", "1st" → "1"
+    .replace(/[^a-z0-9]/g, '');                 // remove all non-alphanumeric
+}
+
+// ─── Parse datetime: handles multiple date formats ───────────────────────────
+// Supported:
+//   DD-MM-YYYY HH:MM       (payment report CreatedAt)
+//   DD/MM/YYYY HH:MM:SS    (batch sheet from/to)
+//   YYYY-MM-DD HH:MM       (ISO-ish)
+function parseDatetime(str) {
+  if (!str) return null;
+  str = str.toString().trim();
+
+  let day, mon, yr, hr = 0, min = 0, sec = 0;
+
+  // Try YYYY-MM-DD (ISO, year first)
+  const isoM = str.match(/^(\d{4})[\-\/](\d{1,2})[\-\/](\d{1,2})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?)?/);
+  if (isoM && parseInt(isoM[1]) > 1900) {
+    yr  = parseInt(isoM[1]);
+    mon = parseInt(isoM[2]) - 1;
+    day = parseInt(isoM[3]);
+    hr  = parseInt(isoM[4] || 0);
+    min = parseInt(isoM[5] || 0);
+    sec = parseInt(isoM[6] || 0);
+    return new Date(yr, mon, day, hr, min, sec);
+  }
+
+  // Try DD/MM/YYYY or DD-MM-YYYY (day first)
+  const dmyM = str.match(/^(\d{1,2})[\-\/](\d{1,2})[\-\/](\d{4})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?)?/);
+  if (dmyM) {
+    day = parseInt(dmyM[1]);
+    mon = parseInt(dmyM[2]) - 1;
+    yr  = parseInt(dmyM[3]);
+    hr  = parseInt(dmyM[4] || 0);
+    min = parseInt(dmyM[5] || 0);
+    sec = parseInt(dmyM[6] || 0);
+    return new Date(yr, mon, day, hr, min, sec);
+  }
+
+  return null;
+}
+
+// ─── Phone parsing ────────────────────────────────────────────────────────────
+function parsePhone(raw) {
+  if (!raw) return { countryCode: '', phone: '' };
+  // Strip quotes, plus, spaces
+  let cleaned = raw.toString().replace(/['\+\s"]/g, '').trim();
+  // Handle scientific notation (e.g. 9.17504E+11)
+  if (/^\d+\.?\d*[eE][+\-]?\d+$/.test(cleaned) || cleaned.includes('E') || cleaned.includes('e')) {
+    try { cleaned = Math.round(Number(raw.toString().replace(/['"]/g,''))).toString(); } catch(e) {}
+  }
+  // Try libphonenumber
+  try {
+    if (window.libphonenumber && cleaned.length >= 10) {
+      const parsed = window.libphonenumber.parsePhoneNumber('+' + cleaned);
+      if (parsed && parsed.isValid()) {
+        return { countryCode: String(parsed.countryCallingCode), phone: String(parsed.nationalNumber) };
+      }
+    }
+  } catch(e) {}
+  // Fallback rules by length/prefix
+  if (cleaned.length === 12 && cleaned.startsWith('91')) return { countryCode: '91', phone: cleaned.slice(2) };
+  if (cleaned.length === 11 && cleaned.startsWith('1'))  return { countryCode: '1',  phone: cleaned.slice(1) };
+  if (cleaned.length === 12 && cleaned.startsWith('44')) return { countryCode: '44', phone: cleaned.slice(2) };
+  if (cleaned.length === 12 && cleaned.startsWith('61')) return { countryCode: '61', phone: cleaned.slice(2) };
+  if (cleaned.length === 12 && cleaned.startsWith('65')) return { countryCode: '65', phone: cleaned.slice(2) };
+  return { countryCode: '', phone: cleaned };
+}
+
+// ─── Parse batch CSV (no header) to get all groups ───────────────────────────
+function parseBatchRaw(data) {
+  // data is array of arrays (header:false)
+  const groups = [];
+  data.forEach(row => {
+    const label = (row[0] || '').toString().trim();
+    const fromStr = (row[1] || '').toString().trim();
+    const toStr   = (row[2] || '').toString().trim();
+    if (!label) return;
+    // Must end in G<number> or G<number>-<suffix>
+    if (!/\bG\d[\d\-]*/i.test(label)) return;
+    // Extract group ID = last token matching G\d
+    const tokens = label.split(/\s+/);
+    const groupPart = tokens[tokens.length - 1];
+    if (!/^G\d/i.test(groupPart)) return;
+    const fromDt = parseDatetime(fromStr);
+    const toDt   = parseDatetime(toStr);
+    // Allow rows with no dates (e.g. last row like "15th March G2" with no "to")
+    groups.push({
+      label,
+      groupId: groupPart.toUpperCase(),
+      from: fromDt,
+      to: toDt,
+      fromRaw: fromStr,
+      toRaw: toStr
+    });
+  });
+  return groups;
+}
+
+// ─── Parse batch CSV to detect groups & render UI ────────────────────────────
+function parseBatchForGroups() {
+  const file = document.getElementById('batchFile').files[0];
+  if (!file) return;
+  Papa.parse(file, {
+    header: false,
+    skipEmptyLines: true,
+    complete: function(results) {
+      const allGroups = parseBatchRaw(results.data);
+      // Filter by workshop date if entered
+      const workshopDate = document.getElementById('workshopDate').value.trim();
+      let matched = filterGroupsByDate(allGroups, workshopDate);
+      if (matched.length === 0) matched = allGroups; // show all if no match
+      detectedGroups = matched;
+      if (matched.length > 0) {
+        document.getElementById('groupsSection').style.display = 'block';
+        renderGroupsUI();
+      }
+    }
+  });
+}
+
+// ─── Filter groups by workshop date string ────────────────────────────────────
+function filterGroupsByDate(allGroups, workshopDate) {
+  if (!workshopDate) return allGroups;
+  const kw = normalizeLabel(workshopDate); // e.g. "8march" or "8thMarch" → "8march"
+  return allGroups.filter(g => {
+    const lc = normalizeLabel(g.label);
+    return lc.includes(kw);
+  });
+}
+
+function renderGroupsUI() {
+  const container = document.getElementById('groupsContainer');
+  const defaultName = document.getElementById('defaultGroupName').value.trim();
+  container.innerHTML = '';
+  detectedGroups.forEach((g, i) => {
+    // Replace GX (case-insensitive) with actual group ID
+    const waName = defaultName ? defaultName.replace(/GX/gi, g.groupId) : g.groupId;
+    const fromLabel = g.fromRaw || '—';
+    const toLabel   = g.toRaw   || '—';
+    container.innerHTML += `
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;margin-bottom:8px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;">
+          <div class="group-tag">${g.groupId}</div>
+          <div style="font-size:12px;color:var(--text2);font-family:'DM Mono',monospace">${g.label}</div>
+          <div style="font-size:11px;color:var(--text2);margin-left:auto;">${fromLabel} → ${toLabel}</div>
+        </div>
+        <div style="font-size:12px;color:var(--accent3);font-family:'DM Mono',monospace;margin-bottom:12px;">WA: ${waName}</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;margin-bottom:8px;">
+              <input type="checkbox" id="diffZoom_${i}" onchange="toggleDiffInput('zoom',${i})">
+              <span class="toggle"></span>
+              <span style="font-size:12px;color:var(--text2)">Different Zoom Link</span>
+            </label>
+            <div class="diff-input" id="diffZoomInput_${i}">
+              <input type="text" id="zoomLink_${i}" placeholder="https://zoom.us/j/..." style="font-size:12px;" />
+            </div>
+          </div>
+          <div>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;margin-bottom:8px;">
+              <input type="checkbox" id="diffWebinar_${i}" onchange="toggleDiffInput('webinar',${i})">
+              <span class="toggle"></span>
+              <span style="font-size:12px;color:var(--text2)">Different Webinar ID</span>
+            </label>
+            <div class="diff-input" id="diffWebinarInput_${i}">
+              <input type="text" id="webinarId_${i}" placeholder="Webinar ID" style="font-size:12px;" />
+            </div>
+          </div>
+        </div>
+      </div>`;
+  });
+}
+
+function toggleDiffInput(type, idx) {
+  const key = type === 'zoom' ? 'Zoom' : 'Webinar';
+  const cb  = document.getElementById(`diff${key}_${idx}`);
+  const div = document.getElementById(`diff${key}Input_${idx}`);
+  if (div) div.classList.toggle('show', cb.checked);
+}
+
+// ─── Logger ───────────────────────────────────────────────────────────────────
+function log(msg, type='info') {
+  const box = document.getElementById('logBox');
+  box.classList.add('show');
+  const line = document.createElement('div');
+  line.className = 'log-line';
+  const tags = { info:'[INFO]', ok:'[OK]', warn:'[WARN]', err:'[ERR]' };
+  line.innerHTML = `<span class="tag-${type}">${tags[type]||'[INFO]'}</span><span>${msg}</span>`;
+  box.appendChild(line);
+  box.scrollTop = box.scrollHeight;
+}
+
+function setProgress(pct) {
+  document.getElementById('progressWrap').classList.add('show');
+  document.getElementById('progressBar').style.width = pct + '%';
+}
+
+function showAlert(msg, type='error') {
+  const box = document.getElementById('alertBox');
+  box.innerHTML = `<div class="alert ${type}">${msg}</div>`;
+}
+
+// ─── Main Generate ────────────────────────────────────────────────────────────
+async function generate() {
+  // Clear previous state
+  document.getElementById('logBox').innerHTML = '';
+  document.getElementById('logBox').classList.remove('show');
+  document.getElementById('alertBox').innerHTML = '';
+  document.getElementById('resultsSection').style.display = 'none';
+  document.getElementById('resultsGrid').innerHTML = '';
+  document.getElementById('dlAllBtn').classList.remove('show');
+  document.getElementById('dlCombinedBtn').classList.remove('show');
+  generatedFiles = {};
+  setProgress(0);
+
+  // Validate inputs
+  const funnel           = document.getElementById('funnelSelect').value;
+  const workshopDate     = document.getElementById('workshopDate').value.trim();
+  const workshopTime     = document.getElementById('workshopTime').value.trim();
+  const defaultGroupName = document.getElementById('defaultGroupName').value.trim();
+  const paymentFile      = document.getElementById('paymentFile').files[0];
+  const batchFile        = document.getElementById('batchFile').files[0];
+
+  if (!funnel)           { showAlert('Please select a funnel.'); return; }
+  if (!workshopDate)     { showAlert('Please enter workshop date.'); return; }
+  if (!workshopTime)     { showAlert('Please enter workshop time.'); return; }
+  if (!defaultGroupName) { showAlert('Please enter default WhatsApp group name.'); return; }
+  if (!paymentFile)      { showAlert('Please upload the payment report CSV.'); return; }
+  if (!batchFile)        { showAlert('Please upload the batch change sheet CSV.'); return; }
+
+  const btn = document.getElementById('genBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Processing...';
+
+  log(`Funnel: ${funnel} | Date: ${workshopDate} | Time: ${workshopTime}`);
+  setProgress(10);
+
+  // ── Parse files ──
+  let paymentData, batchRawData;
+  try {
+    paymentData  = await parseCSVWithHeader(paymentFile);
+    batchRawData = await parseCSVNoHeader(batchFile);
+  } catch(e) {
+    showAlert('Error reading CSV files: ' + e.message);
+    btn.disabled = false; btn.textContent = '⚡ Generate WATI CSVs'; return;
+  }
+
+  log(`Payment report: ${paymentData.length} total rows`);
+  log(`Batch sheet raw rows: ${batchRawData.length}`);
+  setProgress(20);
+
+  // ── Detect column headers in payment report (flexible) ──
+  const paymentHeaders = Object.keys(paymentData[0] || {});
+  const findCol = (...keywords) => paymentHeaders.find(h => {
+    const lh = h.toLowerCase().replace(/[\s_]/g,'');
+    return keywords.some(kw => lh.includes(kw));
+  });
+  const slugCol    = findCol('paymentslug','slug');
+  const statusCol  = findCol('status');
+  const createdCol = findCol('createdat','created');
+  const nameCol    = findCol('customername','customer','name');
+  const emailCol   = findCol('email');
+  const amountCol  = findCol('amount');
+  const phoneCol   = findCol('phonenumber','phone');
+  const ageCol     = findCol('agegroup','age');
+
+  log(`Columns → Slug:${slugCol} | Status:${statusCol} | CreatedAt:${createdCol} | Phone:${phoneCol} | Age:${ageCol}`);
+
+  if (!slugCol)    { showAlert('Cannot find Payment Slug column. Headers: ' + paymentHeaders.join(', ')); btn.disabled=false; btn.textContent='⚡ Generate WATI CSVs'; return; }
+  if (!statusCol)  { showAlert('Cannot find Status column.'); btn.disabled=false; btn.textContent='⚡ Generate WATI CSVs'; return; }
+  if (!createdCol) { showAlert('Cannot find CreatedAt column.'); btn.disabled=false; btn.textContent='⚡ Generate WATI CSVs'; return; }
+  setProgress(30);
+
+  // ── Filter: slug ──
+  const allowedSlugs = new Set((SLUGS[funnel] || []).map(s => s.toLowerCase().trim()));
+  let filtered = paymentData.filter(row =>
+    allowedSlugs.has((row[slugCol] || '').toString().toLowerCase().trim())
+  );
+  log(`After slug filter: ${filtered.length} rows`, filtered.length > 0 ? 'ok' : 'warn');
+
+  // ── Filter: status = captured ──
+  filtered = filtered.filter(row =>
+    (row[statusCol] || '').toString().toLowerCase().trim() === 'captured'
+  );
+  log(`After status=captured filter: ${filtered.length} rows`, filtered.length > 0 ? 'ok' : 'warn');
+  setProgress(45);
+
+  // ── Parse batch sheet ──
+  const allBatchGroups = parseBatchRaw(batchRawData);
+  log(`All batch groups parsed: ${allBatchGroups.map(g=>g.label).join(' | ')}`);
+
+  // ── Match groups to workshop date ──
+  let relevantGroups = filterGroupsByDate(allBatchGroups, workshopDate);
+  if (relevantGroups.length === 0) {
+    log(`No groups matched "${workshopDate}" — trying all groups`, 'warn');
+    relevantGroups = allBatchGroups.filter(g => g.from && g.to);
+  } else {
+    log(`Groups for "${workshopDate}": ${relevantGroups.map(g=>g.label).join(', ')}`, 'ok');
+  }
+
+  // Keep only groups that have valid from+to dates
+  relevantGroups = relevantGroups.filter(g => g.from && g.to);
+  if (relevantGroups.length === 0) {
+    showAlert('Could not find matching groups with valid date ranges in batch sheet. Check your workshop date format (e.g. "8th March").');
+    btn.disabled=false; btn.textContent='⚡ Generate WATI CSVs'; return;
+  }
+  setProgress(55);
+
+  // ── Filter payment rows to date range ──
+  const minDate = new Date(Math.min(...relevantGroups.map(g => g.from.getTime())));
+  const maxDate = new Date(Math.max(...relevantGroups.map(g => g.to.getTime())));
+  log(`Date range: ${minDate.toLocaleString()} → ${maxDate.toLocaleString()}`);
+
+  const beforeCount = filtered.length;
+  filtered = filtered.filter(row => {
+    const dt = parseDatetime((row[createdCol] || '').toString());
+    if (!dt) return false;
+    return dt >= minDate && dt < maxDate;
+  });
+  log(`After date range filter: ${beforeCount} → ${filtered.length} rows`, filtered.length > 0 ? 'ok' : 'warn');
+
+  if (filtered.length === 0) {
+    // Debug: show sample createdAt values
+    const samples = paymentData.slice(0,3).map(r => r[createdCol]).join(' | ');
+    log(`Sample CreatedAt values: ${samples}`, 'warn');
+    log(`Expected format: DD/MM/YYYY HH:MM or DD-MM-YYYY HH:MM`, 'warn');
+  }
+  setProgress(65);
+
+  // ── Assign rows to groups ──
+  const grouped = {};
+  relevantGroups.forEach(g => { grouped[g.groupId] = []; });
+  let unassigned = 0;
+
+  filtered.forEach(row => {
+    const dt = parseDatetime((row[createdCol] || '').toString());
+    if (!dt) { unassigned++; return; }
+    let assigned = false;
+    for (const g of relevantGroups) {
+      if (dt >= g.from && dt < g.to) {
+        grouped[g.groupId].push(row);
+        assigned = true;
+        break;
+      }
+    }
+    if (!assigned) unassigned++;
+  });
+
+  if (unassigned > 0) log(`${unassigned} rows fell outside all group windows`, 'warn');
+  relevantGroups.forEach(g => log(`${g.groupId} (${g.label}): ${grouped[g.groupId].length} records`, 'ok'));
+  setProgress(78);
+
+  // ── Build WATI CSVs ──
+  const defaultZoom    = document.getElementById('defaultZoomLink').value.trim();
+  const defaultWebinar = document.getElementById('defaultWebinarId').value.trim();
+  const resultsGrid    = document.getElementById('resultsGrid');
+  document.getElementById('resultsSection').style.display = 'block';
+
+  relevantGroups.forEach((g, i) => {
+    const rows   = grouped[g.groupId] || [];
+    // Replace GX with actual group ID in the default name
+    const waName = defaultGroupName.replace(/GX/gi, g.groupId);
+
+    // Per-group overrides
+    const diffZoomCb    = document.getElementById(`diffZoom_${i}`);
+    const diffWebinarCb = document.getElementById(`diffWebinar_${i}`);
+    const zoomLink  = (diffZoomCb && diffZoomCb.checked)    ? (document.getElementById(`zoomLink_${i}`)?.value?.trim()   || defaultZoom)    : defaultZoom;
+    const webinarId = (diffWebinarCb && diffWebinarCb.checked) ? (document.getElementById(`webinarId_${i}`)?.value?.trim() || defaultWebinar) : defaultWebinar;
+
+    const watiRows = rows.map(row => {
+      const phoneRaw = (row[phoneCol] || '').toString();
+      const { countryCode, phone } = parsePhone(phoneRaw);
+      return {
+        Name:            ((row[nameCol]    || '').toString().trim()) || 'User',
+        CountryCode:     countryCode,
+        Phone:           phone,
+        AllowBroadcast:  'TRUE',
+        AllowSMS:        'TRUE',
+        email:           (row[emailCol]   || '').toString().trim(),
+        amount:          (row[amountCol]  || '').toString().trim(),
+        'Amount Date':   (row[createdCol] || '').toString().trim(),
+        Age:             (row[ageCol]     || '').toString().trim(),
+        date:            workshopDate,
+        time:            workshopTime,
+        batch:           funnel,
+        whatsapp_link:   waName,
+        zoom_link:       zoomLink,
+        webinar_id:      webinarId
+      };
+    });
+
+    const csv      = Papa.unparse(watiRows);
+    const filename = `${waName}.csv`;
+    generatedFiles[filename] = csv;
+
+    const card = document.createElement('div');
+    card.className = 'result-card';
+    card.innerHTML = `
+      <div class="result-group-name">${g.groupId}</div>
+      <div class="result-count">${rows.length}</div>
+      <div class="result-label">contacts</div>
+      <div style="font-size:10px;color:var(--text2);font-family:'DM Mono',monospace;margin-top:2px;">${waName}</div>
+      <a class="dl-btn" onclick="downloadFile('${filename}')">⬇ Download CSV</a>
+    `;
+    resultsGrid.appendChild(card);
+  });
+
+  setProgress(100);
+  log(`✅ Done! Generated ${relevantGroups.length} WATI CSV files.`, 'ok');
+  document.getElementById('dlAllBtn').classList.add('show');
+  document.getElementById('dlCombinedBtn').classList.add('show');
+  btn.disabled = false;
+  btn.textContent = '⚡ Generate WATI CSVs';
+  showAlert(`✅ Successfully generated ${relevantGroups.length} WATI CSV files!`, 'success');
+}
+
+// ─── CSV Parsing helpers ──────────────────────────────────────────────────────
+function parseCSVWithHeader(file) {
+  return new Promise((resolve, reject) => {
+    Papa.parse(file, {
+      header: true, skipEmptyLines: true,
+      complete: r => resolve(r.data),
+      error: e => reject(e)
+    });
+  });
+}
+
+function parseCSVNoHeader(file) {
+  return new Promise((resolve, reject) => {
+    Papa.parse(file, {
+      header: false, skipEmptyLines: true,
+      complete: r => resolve(r.data),
+      error: e => reject(e)
+    });
+  });
+}
+
+// ─── Download helpers ─────────────────────────────────────────────────────────
+function downloadFile(filename) {
+  const csv = generatedFiles[filename];
+  if (!csv) return;
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename; a.click();
+  URL.revokeObjectURL(url);
+}
+
+async function downloadAll() {
+  const zip = new JSZip();
+  Object.entries(generatedFiles).forEach(([name, csv]) => zip.file(name, '\uFEFF' + csv));
+  const blob = await zip.generateAsync({ type: 'blob' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'wati_files.zip'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+function downloadCombined() {
+  const files = Object.values(generatedFiles);
+  if (!files.length) return;
+  // Parse each CSV, skip header for all but first, then rejoin
+  let combinedRows = [];
+  let headers = null;
+  files.forEach((csv, idx) => {
+    const parsed = Papa.parse(csv, { header: true, skipEmptyLines: true });
+    if (idx === 0) headers = parsed.meta.fields;
+    combinedRows = combinedRows.concat(parsed.data);
+  });
+  const combinedCsv = Papa.unparse(combinedRows, { fields: headers });
+  const blob = new Blob(['\uFEFF' + combinedCsv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'wati_combined_all_groups.csv'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+function downloadSampleBatch() {
+  const csv = `Batch Name,from (inclusive),to (exclusive)
+1st March G2,22/02/2026 00:00:00,28/02/2026 22:45:00
+1st March G3,28/02/2026 22:45:00,01/03/2026 00:00:00
+8th March G2,01/03/2026 00:00:00,07/03/2026 18:00:00
+8th March G3,07/03/2026 18:00:00,08/03/2026 00:00:00
+15th March G2,08/03/2026 00:00:00,14/03/2026 18:00:00
+15th March G3,14/03/2026 18:00:00,15/03/2026 00:00:00`;
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'batch_change_sheet_sample.csv'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ─── Drag & drop ──────────────────────────────────────────────────────────────
+['paymentDrop','batchDrop'].forEach(id => {
+  const el = document.getElementById(id);
+  el.addEventListener('dragover', e => { e.preventDefault(); el.classList.add('dragover'); });
+  el.addEventListener('dragleave', () => el.classList.remove('dragover'));
+  el.addEventListener('drop', e => {
+    e.preventDefault(); el.classList.remove('dragover');
+    const type = id === 'paymentDrop' ? 'payment' : 'batch';
+    const input = document.getElementById(type === 'payment' ? 'paymentFile' : 'batchFile');
+    input.files = e.dataTransfer.files;
+    onFileSelect(type);
+  });
+});
+
+// Re-detect groups when date input changes
+document.getElementById('workshopDate').addEventListener('input', () => {
+  if (document.getElementById('batchFile').files[0]) parseBatchForGroups();
+});
+
+</script>
+</body>
+</html>
