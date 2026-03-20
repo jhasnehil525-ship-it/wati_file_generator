@@ -624,6 +624,7 @@
           <option value="SQL">SQL</option>
           <option value="DRF">DRF</option>
           <option value="AI">AI</option>
+          <option value="AITV">AITV</option>
           <option value="Excel">Excel</option>
           <option value="SMAI">SMAI</option>
           <option value="CAW">CAW</option>
@@ -753,47 +754,28 @@
 <script>
 
 // ─── Slug Maps ───────────────────────────────────────────────────────────────
-const SLUGS = {
-  Python: [
-    'at01-hm','python-using-ai-workshop-ga2','python-using-ai-workshop-ga4',
-    'at01','python-using-ai-workshop-ga2b','python-using-ai-workshop-ga1b',
-    'python-using-ai-workshop-fb2','python-using-ai-workshop-ga1','at01-fb3',
-    'python-using-ai-workshop-ga5','python-using-ai-workshop-fb1b','at01-fb4',
-    'at01-ga3','python-using-ai-workshop-fb5'
-  ],
-  Excel: [
-    'excel-workshop-hm','excel-workshop','excel-workshop-fb1b','excel-workshop-ga',
-    'excel-using-ai-workshop-ga1b','excel-using-ai-workshop-fb2','excel-using-ai-workshop-fb3',
-    'excel-using-ai-workshop-fb4','excel-using-ai-workshop-ga4','excel-using-ai-workshop-fb4',
-    'excel-using-ai-workshop-ga5'
-  ],
-  PBI: [
-    'powerbi-mastery-hm','powerbi-mastery-fb1','powerbi-mastery-ga1','powerbi-mastery-fb2',
-    'powerbi-mastery-ga2','powerbi-mastery-2d-fb2','powerbi-mastery-pr','powerbi-mastery-af',
-    'powerbi-mastery-ga5','powerbi-mastery-fb1h','powerbi-mastery-fb3','powerbi-mastery-ga3',
-    'powerbi-mastery-fb4'
-  ],
-  DRF: [
-    'personal-finance-hm','personal-finance-fb1','personal-finance-fb2',
-    'personal-finance-ga1','personal-finance-ga2','personal-finance-ga4-25',
-    'personal-finance-1d-ga5'
-  ],
-  CAW: [
-    '5-day-cricket-analytics-workshop-hm','5-day-cricket-analytics-workshop-fb',
-    '5-day-cricket-analytics-workshop-ga'
-  ],
-  SQL: ['sqlai-fb1','sqlai-ga1','sqlai-ga2'],
-  AI: [
-    'ai-tools-workshop-fb15','ai-tools-workshop-fb6','ai-tools-workshop-hindi-ga',
-    'ai-tools-workshop-ga13','ai-tools-workshop-ga7','ai-tools-workshop',
-    'ai-tools-workshop-fb2','ai-tools-workshop-ga6','ai-tools-workshop-fb14',
-    'ai-tools-workshop-hm','ai-tools-workshop-ga10','ai-tools-workshop-ga14',
-    'ai-tools-workshop-ga-r3','ai-tools-workshop-in-fb25','ai-tools-workshop-fb-r4',
-    'ai-tools-workshop-fb9','ai-tools-workshop-fb4b','ai-tools-workshop-fb6b',
-    'ai-tools-workshop-ga14b','ai-tools-workshop-ga9','ai-tools-workshop-fb7'
-  ],
-  SMAI: []
+// ─── Slug matching conditions per funnel ────────────────────────────────────
+// Each entry is an array of conditions (OR logic between conditions)
+// { type: 'contains', value: '...' }  → slug.includes(value)
+// { type: 'exact',    value: '...' }  → slug === value
+const SLUG_CONDITIONS = {
+  AI:     [ { type: 'contains', value: 'ai-tools-workshop' } ],
+  Python: [ { type: 'contains', value: 'at01' }, { type: 'contains', value: 'python-using-ai' } ],
+  SQL:    [ { type: 'contains', value: 'sqlai' } ],
+  DRF:    [ { type: 'contains', value: 'personal-finance' } ],
+  PBI:    [ { type: 'contains', value: 'powerbi-mastery' } ],
+  Excel:  [ { type: 'contains', value: 'excel-workshop' }, { type: 'contains', value: 'excel-using-ai' } ],
+  AITV:   [ { type: 'exact', value: 'aitv-app' }, { type: 'exact', value: 'aitvapp' } ],
+  CAW:    [ { type: 'contains', value: '5-day-cricket-analytics-workshop' } ],
+  SMAI:   []
 };
+
+function slugMatchesFunnel(slug, funnel) {
+  const conditions = SLUG_CONDITIONS[funnel] || [];
+  if (conditions.length === 0) return false;
+  const s = slug.toLowerCase().trim();
+  return conditions.some(c => c.type === 'exact' ? s === c.value : s.includes(c.value));
+}
 
 // ─── State ────────────────────────────────────────────────────────────────────
 let detectedGroups = [];
@@ -802,12 +784,15 @@ let generatedFiles = {};
 // ─── UI Helpers ───────────────────────────────────────────────────────────────
 function onFunnelChange() {
   const f = document.getElementById('funnelSelect').value;
-  const slugs = SLUGS[f] || [];
+  const conditions = SLUG_CONDITIONS[f] || [];
   const hint = document.getElementById('slugHint');
-  if (slugs.length) {
-    hint.innerHTML = `${slugs.length} slugs: ` + slugs.slice(0,3).map(s=>`<span class="tag-badge">${s}</span>`).join('') + (slugs.length>3 ? `<span class="tag-badge">+${slugs.length-3} more</span>` : '');
+  if (conditions.length) {
+    const desc = conditions.map(c =>
+      `<span class="tag-badge">${c.type === 'exact' ? '=' : '~'} ${c.value}</span>`
+    ).join(' <span style="color:var(--text2);font-size:10px">OR</span> ');
+    hint.innerHTML = desc;
   } else {
-    hint.innerHTML = f === 'SMAI' ? '<span style="color:var(--warning)">No slugs configured yet</span>' : '';
+    hint.innerHTML = '<span style="color:var(--warning)">No conditions configured yet</span>';
   }
 }
 
@@ -1101,10 +1086,9 @@ async function generate() {
   if (!createdCol) { showAlert('Cannot find CreatedAt column.'); btn.disabled=false; btn.textContent='⚡ Generate WATI CSVs'; return; }
   setProgress(30);
 
-  // ── Filter: slug ──
-  const allowedSlugs = new Set((SLUGS[funnel] || []).map(s => s.toLowerCase().trim()));
+  // ── Filter: slug (condition-based) ──
   let filtered = paymentData.filter(row =>
-    allowedSlugs.has((row[slugCol] || '').toString().toLowerCase().trim())
+    slugMatchesFunnel((row[slugCol] || '').toString(), funnel)
   );
   log(`After slug filter: ${filtered.length} rows`, filtered.length > 0 ? 'ok' : 'warn');
 
