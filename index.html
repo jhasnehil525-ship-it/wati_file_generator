@@ -809,11 +809,23 @@ function onGroupNameChange() {
   if (detectedGroups.length) renderGroupsUI();
 }
 
-// ─── Normalize label text for matching (removes spaces, punctuation, lowercases) ──
+// ─── Normalize label text for matching ───────────────────────────────────────
+// Expands month abbreviations before stripping, so "Mar" matches "March"
 function normalizeLabel(str) {
-  return str.toLowerCase()
-    .replace(/\b(\d+)(st|nd|rd|th)\b/g, '$1') // "8th" → "8", "1st" → "1"
-    .replace(/[^a-z0-9]/g, '');                 // remove all non-alphanumeric
+  const monthMap = {
+    jan: 'january', feb: 'february', mar: 'march', apr: 'april',
+    may: 'may', jun: 'june', jul: 'july', aug: 'august',
+    sep: 'september', oct: 'october', nov: 'november', dec: 'december'
+  };
+  let s = str.toLowerCase();
+  // Expand 3-letter month abbreviations to full month names
+  s = s.replace(/\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\b/g,
+    m => monthMap[m] || m);
+  // Remove ordinal suffixes: 8th→8, 1st→1, 22nd→22
+  s = s.replace(/\b(\d+)(st|nd|rd|th)\b/g, '$1');
+  // Strip all non-alphanumeric
+  s = s.replace(/[^a-z0-9]/g, '');
+  return s;
 }
 
 // ─── Parse datetime: handles multiple date formats ───────────────────────────
@@ -941,7 +953,7 @@ function parseBatchForGroups() {
       let matched = filterGroupsByDate(allGroups, workshopDate);
       if (matched.length === 0) matched = allGroups; // show all if no match
       detectedGroups = matched;
-      if (matched.length > 0) {
+      if (detectedGroups.length > 0) {
         document.getElementById('groupsSection').style.display = 'block';
         renderGroupsUI();
       }
@@ -1097,7 +1109,16 @@ async function generate() {
 
   log(`Columns → Slug:${slugCol} | Status:${statusCol} | CreatedAt:${createdCol} | Phone:${phoneCol} | Age:${ageCol}`);
 
-  if (!slugCol)    { showAlert('Cannot find Payment Slug column. Headers: ' + paymentHeaders.join(', ')); btn.disabled=false; btn.textContent='⚡ Generate WATI CSVs'; return; }
+  if (!slugCol) {
+    // Check if user accidentally uploaded batch sheet as payment report
+    const looksLikeBatch = paymentHeaders.some(h => h.toLowerCase().includes('from') || h.toLowerCase().includes('done by'));
+    if (looksLikeBatch) {
+      showAlert('❌ It looks like you uploaded the Batch Change Sheet where the Payment Report should be. Please swap the files.');
+    } else {
+      showAlert('Cannot find Payment Slug column. Headers found: ' + paymentHeaders.join(', '));
+    }
+    btn.disabled=false; btn.textContent='⚡ Generate WATI CSVs'; return;
+  }
   if (!statusCol)  { showAlert('Cannot find Status column.'); btn.disabled=false; btn.textContent='⚡ Generate WATI CSVs'; return; }
   if (!createdCol) { showAlert('Cannot find CreatedAt column.'); btn.disabled=false; btn.textContent='⚡ Generate WATI CSVs'; return; }
   setProgress(30);
@@ -1109,6 +1130,12 @@ async function generate() {
   log(`After slug filter: ${filtered.length} rows`, filtered.length > 0 ? 'ok' : 'warn');
 
   // ── Filter: status = captured ──
+  const failedRows = paymentData.filter(row =>
+    slugMatchesFunnel((row[slugCol] || '').toString(), funnel) &&
+    (row[statusCol] || '').toString().toLowerCase().trim() !== 'captured'
+  );
+  log(`Slug-matched but status != captured (dropped): ${failedRows.length} rows`, failedRows.length > 0 ? 'warn' : 'ok');
+
   filtered = filtered.filter(row =>
     (row[statusCol] || '').toString().toLowerCase().trim() === 'captured'
   );
@@ -1128,10 +1155,9 @@ async function generate() {
     log(`Groups for "${workshopDate}": ${relevantGroups.map(g=>g.label).join(', ')}`, 'ok');
   }
 
-  // For groups with no "to" date (open/ongoing batch), use max possible date
-  // so all data from "from" onwards is captured
+  // Keep only groups that have at least a "from" date
   const maxPossibleDate = new Date(8640000000000000); // far future
-  relevantGroups = relevantGroups.filter(g => g.from); // must have at least a from date
+  relevantGroups = relevantGroups.filter(g => g.from);
   relevantGroups = relevantGroups.map(g => {
     if (!g.to) {
       log(`Group ${g.groupId} has no closing date — using max date (open batch)`, 'warn');
@@ -1139,6 +1165,7 @@ async function generate() {
     }
     return g;
   });
+
   if (relevantGroups.length === 0) {
     showAlert('Could not find matching groups with valid date ranges in batch sheet. Check your workshop date format (e.g. "8th March").');
     btn.disabled=false; btn.textContent='⚡ Generate WATI CSVs'; return;
@@ -1182,10 +1209,13 @@ async function generate() {
   const grouped = {};
   relevantGroups.forEach(g => { grouped[g.groupId] = []; });
   let unassigned = 0;
+  let nullDate = 0;
+  let outsideRange = 0;
 
   filtered.forEach(row => {
-    const dt = parseDatetime((row[createdCol] || '').toString());
-    if (!dt) { unassigned++; return; }
+    const rawDt = (row[createdCol] || '').toString();
+    const dt = parseDatetime(rawDt);
+    if (!dt) { nullDate++; unassigned++; return; }
     let assigned = false;
     for (const g of relevantGroups) {
       if (dt >= g.from && dt < g.to) {
@@ -1194,10 +1224,13 @@ async function generate() {
         break;
       }
     }
-    if (!assigned) unassigned++;
+    if (!assigned) { outsideRange++; unassigned++; }
   });
 
-  if (unassigned > 0) log(`${unassigned} rows fell outside all group windows`, 'warn');
+  if (nullDate > 0)      log(`${nullDate} rows dropped — CreatedAt could not be parsed`, 'warn');
+  if (outsideRange > 0)  log(`${outsideRange} rows dropped — CreatedAt outside all group date windows`, 'warn');
+  if (unassigned > 0)    log(`Total dropped: ${unassigned} rows`, 'warn');
+  else                   log(`All rows assigned successfully`, 'ok');
   relevantGroups.forEach(g => log(`${g.groupId} (${g.label}): ${grouped[g.groupId].length} records`, 'ok'));
   setProgress(78);
 
