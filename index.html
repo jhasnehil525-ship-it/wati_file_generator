@@ -818,16 +818,16 @@ function normalizeLabel(str) {
 
 // ─── Parse datetime: handles multiple date formats ───────────────────────────
 // Supported:
-//   DD-MM-YYYY HH:MM       (payment report CreatedAt)
-//   DD/MM/YYYY HH:MM:SS    (batch sheet from/to)
-//   YYYY-MM-DD HH:MM       (ISO-ish)
+//   DD-MM-YYYY HH:MM       (payment report CreatedAt)  e.g. 14-03-2026 23:26
+//   DD/MM/YYYY HH:MM:SS    (batch sheet from/to)       e.g. 14/03/2026 00:00:00
+//   YYYY-MM-DD HH:MM       (ISO)                       e.g. 2026-03-14 23:26
 function parseDatetime(str) {
   if (!str) return null;
   str = str.toString().trim();
 
   let day, mon, yr, hr = 0, min = 0, sec = 0;
 
-  // Try YYYY-MM-DD (ISO, year first)
+  // Format A: YYYY-MM-DD ... (year is 4 digits at start)
   const isoM = str.match(/^(\d{4})[\-\/](\d{1,2})[\-\/](\d{1,2})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?)?/);
   if (isoM && parseInt(isoM[1]) > 1900) {
     yr  = parseInt(isoM[1]);
@@ -836,19 +836,35 @@ function parseDatetime(str) {
     hr  = parseInt(isoM[4] || 0);
     min = parseInt(isoM[5] || 0);
     sec = parseInt(isoM[6] || 0);
-    return new Date(yr, mon, day, hr, min, sec);
+    const d = new Date(yr, mon, day, hr, min, sec);
+    if (!isNaN(d.getTime())) return d;
   }
 
-  // Try DD/MM/YYYY or DD-MM-YYYY (day first)
+  // Format B: DD-MM-YYYY or DD/MM/YYYY (day first, year is 4 digits at end)
+  // Key rule: first segment (day) can be 1-31, second segment (month) must be 1-12
   const dmyM = str.match(/^(\d{1,2})[\-\/](\d{1,2})[\-\/](\d{4})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?)?/);
   if (dmyM) {
-    day = parseInt(dmyM[1]);
-    mon = parseInt(dmyM[2]) - 1;
+    const d1 = parseInt(dmyM[1]); // could be day
+    const d2 = parseInt(dmyM[2]); // could be month
     yr  = parseInt(dmyM[3]);
     hr  = parseInt(dmyM[4] || 0);
     min = parseInt(dmyM[5] || 0);
     sec = parseInt(dmyM[6] || 0);
-    return new Date(yr, mon, day, hr, min, sec);
+
+    // If first number > 12, it must be the day (can't be month)
+    // If second number > 12, it must be the day → swap (MM-DD format)
+    if (d1 > 12) {
+      // Definitely DD-MM-YYYY
+      day = d1; mon = d2 - 1;
+    } else if (d2 > 12) {
+      // Definitely MM-DD-YYYY (unusual but handle it)
+      mon = d1 - 1; day = d2;
+    } else {
+      // Ambiguous: assume DD-MM-YYYY (Indian format used in this app)
+      day = d1; mon = d2 - 1;
+    }
+    const d = new Date(yr, mon, day, hr, min, sec);
+    if (!isNaN(d.getTime())) return d;
   }
 
   return null;
@@ -1112,8 +1128,17 @@ async function generate() {
     log(`Groups for "${workshopDate}": ${relevantGroups.map(g=>g.label).join(', ')}`, 'ok');
   }
 
-  // Keep only groups that have valid from+to dates
-  relevantGroups = relevantGroups.filter(g => g.from && g.to);
+  // For groups with no "to" date (open/ongoing batch), use max possible date
+  // so all data from "from" onwards is captured
+  const maxPossibleDate = new Date(8640000000000000); // far future
+  relevantGroups = relevantGroups.filter(g => g.from); // must have at least a from date
+  relevantGroups = relevantGroups.map(g => {
+    if (!g.to) {
+      log(`Group ${g.groupId} has no closing date — using max date (open batch)`, 'warn');
+      return { ...g, to: maxPossibleDate, toRaw: 'open (no closing date)' };
+    }
+    return g;
+  });
   if (relevantGroups.length === 0) {
     showAlert('Could not find matching groups with valid date ranges in batch sheet. Check your workshop date format (e.g. "8th March").');
     btn.disabled=false; btn.textContent='⚡ Generate WATI CSVs'; return;
@@ -1121,9 +1146,22 @@ async function generate() {
   setProgress(55);
 
   // ── Filter payment rows to date range ──
+  // Log each group's from/to for debugging
+  relevantGroups.forEach(g => {
+    log(`Group ${g.groupId}: from=${g.from ? g.from.toLocaleString() : 'NULL'} | to=${g.to ? g.to.toLocaleString() : 'NULL'} | rawFrom="${g.fromRaw}" | rawTo="${g.toRaw}"`);
+  });
+
   const minDate = new Date(Math.min(...relevantGroups.map(g => g.from.getTime())));
   const maxDate = new Date(Math.max(...relevantGroups.map(g => g.to.getTime())));
-  log(`Date range: ${minDate.toLocaleString()} → ${maxDate.toLocaleString()}`);
+  log(`Overall date range: ${minDate.toLocaleString()} → ${maxDate.toLocaleString()}`);
+
+  // Log sample CreatedAt values from payment report
+  const sampleDates = filtered.slice(0, 5).map(r => {
+    const raw = (r[createdCol] || '').toString();
+    const parsed = parseDatetime(raw);
+    return `"${raw}" → ${parsed ? parsed.toLocaleString() : 'NULL'}`;
+  });
+  log(`Sample CreatedAt parsing: ${sampleDates.join(' | ')}`, 'info');
 
   const beforeCount = filtered.length;
   filtered = filtered.filter(row => {
@@ -1134,10 +1172,9 @@ async function generate() {
   log(`After date range filter: ${beforeCount} → ${filtered.length} rows`, filtered.length > 0 ? 'ok' : 'warn');
 
   if (filtered.length === 0) {
-    // Debug: show sample createdAt values
-    const samples = paymentData.slice(0,3).map(r => r[createdCol]).join(' | ');
-    log(`Sample CreatedAt values: ${samples}`, 'warn');
-    log(`Expected format: DD/MM/YYYY HH:MM or DD-MM-YYYY HH:MM`, 'warn');
+    const samples = filtered.slice(0,3).map(r => r[createdCol]).join(' | ');
+    log(`No rows matched the date range. Min: ${minDate.toLocaleString()} Max: ${maxDate.toLocaleString()}`, 'warn');
+    log(`Check: are payment dates within this window?`, 'warn');
   }
   setProgress(65);
 
