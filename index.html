@@ -12,22 +12,20 @@
     --bg: #0a0a0f;
     --surface: #13131a;
     --surface2: #1c1c27;
+    --surface3: #232333;
     --border: #2a2a3d;
     --accent: #7c6aff;
     --accent2: #ff6a9a;
     --accent3: #6affcd;
     --text: #e8e8f0;
     --text2: #8888aa;
-    --text3: #5555777;
     --success: #4ade80;
     --warning: #fbbf24;
     --error: #f87171;
     --radius: 12px;
     --radius-sm: 8px;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
   body {
     background: var(--bg);
     color: var(--text);
@@ -35,7 +33,6 @@
     min-height: 100vh;
     overflow-x: hidden;
   }
-
   body::before {
     content: '';
     position: fixed;
@@ -47,354 +44,201 @@
     pointer-events: none;
     z-index: 0;
   }
-
-  .glow-orb {
-    position: fixed;
-    border-radius: 50%;
-    filter: blur(120px);
-    pointer-events: none;
-    z-index: 0;
-  }
+  .glow-orb { position: fixed; border-radius: 50%; filter: blur(120px); pointer-events: none; z-index: 0; }
   .glow-orb-1 { width: 600px; height: 600px; background: rgba(124,106,255,0.08); top: -200px; left: -100px; }
   .glow-orb-2 { width: 400px; height: 400px; background: rgba(255,106,154,0.06); bottom: 100px; right: -100px; }
 
-  .container {
-    max-width: 860px;
-    margin: 0 auto;
-    padding: 40px 24px 80px;
-    position: relative;
-    z-index: 1;
-  }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 24px 80px; position: relative; z-index: 1; }
 
-  header {
-    text-align: center;
-    margin-bottom: 48px;
-    animation: fadeDown 0.6s ease both;
-  }
-
+  header { text-align: center; margin-bottom: 48px; animation: fadeDown 0.6s ease both; }
   .logo-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
+    display: inline-flex; align-items: center; gap: 8px;
     background: linear-gradient(135deg, rgba(124,106,255,0.15), rgba(106,255,205,0.1));
-    border: 1px solid rgba(124,106,255,0.3);
-    border-radius: 100px;
-    padding: 6px 16px;
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    color: var(--accent3);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 20px;
+    border: 1px solid rgba(124,106,255,0.3); border-radius: 100px;
+    padding: 6px 16px; font-family: 'DM Mono', monospace; font-size: 11px;
+    color: var(--accent3); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;
   }
   .logo-badge::before { content: '◈'; font-size: 10px; }
-
   h1 {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(28px, 5vw, 46px);
-    font-weight: 800;
-    line-height: 1.1;
+    font-family: 'Syne', sans-serif; font-size: clamp(28px, 5vw, 46px); font-weight: 800; line-height: 1.1;
     background: linear-gradient(135deg, #e8e8f0 0%, #7c6aff 50%, #ff6a9a 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 12px;
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 12px;
   }
-
-  .subtitle {
-    color: var(--text2);
-    font-size: 15px;
-    font-weight: 300;
-    letter-spacing: 0.3px;
-  }
-
-  .steps-nav {
-    display: flex;
-    gap: 0;
-    margin-bottom: 40px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 6px;
-    animation: fadeUp 0.6s 0.1s ease both;
-    overflow-x: auto;
-  }
-
-  .step-pill {
-    flex: 1;
-    min-width: 80px;
-    text-align: center;
-    padding: 8px 12px;
-    border-radius: var(--radius-sm);
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    color: var(--text2);
-    transition: all 0.2s;
-    cursor: default;
-    white-space: nowrap;
-  }
-  .step-pill.active {
-    background: linear-gradient(135deg, rgba(124,106,255,0.25), rgba(124,106,255,0.1));
-    color: var(--accent);
-    border: 1px solid rgba(124,106,255,0.3);
-  }
-  .step-pill.done { color: var(--accent3); }
-  .step-pill.done::before { content: '✓ '; }
+  .subtitle { color: var(--text2); font-size: 15px; font-weight: 300; letter-spacing: 0.3px; }
 
   .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 28px;
-    margin-bottom: 20px;
-    animation: fadeUp 0.5s ease both;
-    transition: border-color 0.3s;
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 28px; margin-bottom: 20px; animation: fadeUp 0.5s ease both; transition: border-color 0.3s;
   }
   .card:hover { border-color: rgba(124,106,255,0.3); }
-
-  .card-header {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 24px;
-  }
-
+  .card-header { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
   .step-num {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
+    width: 36px; height: 36px; border-radius: 10px;
     background: linear-gradient(135deg, rgba(124,106,255,0.3), rgba(255,106,154,0.2));
     border: 1px solid rgba(124,106,255,0.4);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 14px;
-    color: var(--accent);
-    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; color: var(--accent); flex-shrink: 0;
   }
+  .card-title { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700; color: var(--text); }
+  .card-subtitle { font-size: 12px; color: var(--text2); margin-top: 2px; }
 
-  .card-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 17px;
-    font-weight: 700;
-    color: var(--text);
-  }
-  .card-subtitle {
-    font-size: 12px;
-    color: var(--text2);
-    margin-top: 2px;
-  }
-
-  .form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-  }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
   @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
-
-  .field {
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
-  }
+  .field { display: flex; flex-direction: column; gap: 7px; }
 
   label {
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--text2);
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
+    font-size: 12px; font-weight: 500; color: var(--text2);
+    letter-spacing: 0.5px; text-transform: uppercase;
     font-family: 'DM Mono', monospace;
   }
   label .req { color: var(--accent2); margin-left: 3px; }
 
   input, select, textarea {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    padding: 11px 14px;
-    outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    width: 100%;
-    -webkit-appearance: none;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); color: var(--text);
+    font-family: 'DM Sans', sans-serif; font-size: 14px;
+    padding: 11px 14px; outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s; width: 100%; -webkit-appearance: none;
   }
   input:focus, select:focus, textarea:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(124,106,255,0.12);
+    border-color: var(--accent); box-shadow: 0 0 0 3px rgba(124,106,255,0.12);
   }
   input::placeholder { color: var(--text2); opacity: 0.5; }
   select option { background: var(--surface2); }
 
   .file-drop {
-    border: 2px dashed var(--border);
-    border-radius: var(--radius);
-    padding: 32px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.2s;
-    position: relative;
-    background: rgba(124,106,255,0.02);
+    border: 2px dashed var(--border); border-radius: var(--radius);
+    padding: 32px; text-align: center; cursor: pointer;
+    transition: all 0.2s; position: relative; background: rgba(124,106,255,0.02);
   }
-  .file-drop:hover, .file-drop.dragover {
-    border-color: var(--accent);
-    background: rgba(124,106,255,0.06);
-  }
+  .file-drop:hover, .file-drop.dragover { border-color: var(--accent); background: rgba(124,106,255,0.06); }
   .file-drop input[type=file] {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    cursor: pointer;
-    width: 100%;
-    height: 100%;
-    padding: 0;
-    border: none;
-    background: none;
+    position: absolute; inset: 0; opacity: 0; cursor: pointer;
+    width: 100%; height: 100%; padding: 0; border: none; background: none;
   }
   .file-icon { font-size: 32px; margin-bottom: 10px; display: block; }
   .file-label { font-size: 14px; color: var(--text2); }
   .file-label span { color: var(--accent); font-weight: 500; }
-  .file-name {
-    margin-top: 8px;
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    color: var(--accent3);
+  .file-name { margin-top: 8px; font-family: 'DM Mono', monospace; font-size: 12px; color: var(--accent3); }
+
+  /* ── Variable builder ── */
+  .var-count-row {
+    display: flex; align-items: center; gap: 16px; margin-bottom: 24px; flex-wrap: wrap;
+  }
+  .var-count-row label { text-transform: uppercase; font-family: 'DM Mono', monospace; font-size: 12px; color: var(--text2); white-space: nowrap; }
+  .var-count-input {
+    width: 80px !important; text-align: center; font-family: 'DM Mono', monospace;
+    font-size: 20px !important; font-weight: 600 !important; padding: 8px !important;
+  }
+  .var-count-btn {
+    width: 36px; height: 36px; border-radius: 8px;
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text); font-size: 18px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s; flex-shrink: 0;
+  }
+  .var-count-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  .constants-row {
+    display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; align-items: center;
+  }
+  .const-pill {
+    background: rgba(106,255,205,0.08); border: 1px solid rgba(106,255,205,0.22);
+    border-radius: 6px; padding: 4px 10px;
+    font-family: 'DM Mono', monospace; font-size: 11px; color: var(--accent3);
+    display: flex; align-items: center; gap: 5px;
+  }
+  .const-pill::before { content: '🔒'; font-size: 9px; }
+  .const-label { font-size: 11px; color: var(--text2); font-family: 'DM Mono', monospace; margin-right: 4px; }
+
+  .vars-list { display: flex; flex-direction: column; gap: 10px; }
+
+  .var-row {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 14px 16px;
+    display: grid; grid-template-columns: 28px 1fr 1fr auto;
+    gap: 12px; align-items: center; transition: border-color 0.2s;
+  }
+  .var-row:hover { border-color: rgba(124,106,255,0.3); }
+
+  .var-idx {
+    font-family: 'DM Mono', monospace; font-size: 12px;
+    color: var(--accent); font-weight: 600; text-align: center;
   }
 
-  .groups-container {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-top: 16px;
+  .var-name-input {
+    font-family: 'DM Mono', monospace !important;
+    font-size: 13px !important; padding: 8px 12px !important;
+    border-color: rgba(124,106,255,0.25) !important;
   }
+  .var-name-input:focus { border-color: var(--accent) !important; }
 
-  .group-row {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 14px 16px;
-    display: grid;
-    grid-template-columns: 100px 1fr;
-    gap: 12px;
-    align-items: center;
+  /* source selector */
+  .var-source-wrap { position: relative; }
+  .var-source-select {
+    font-size: 12px !important; padding: 8px 12px !important;
+    border-color: rgba(124,106,255,0.2) !important;
+    color: var(--text2) !important;
   }
+  .var-source-select.has-val { color: var(--text) !important; }
 
-  .group-tag {
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--accent);
-    background: rgba(124,106,255,0.12);
-    border: 1px solid rgba(124,106,255,0.2);
-    border-radius: 6px;
-    padding: 4px 10px;
-    text-align: center;
+  /* fixed-value sub-input */
+  .var-fixed-input {
+    display: none; margin-top: 6px;
+    font-size: 12px !important; padding: 7px 10px !important;
+    border-color: rgba(255,106,154,0.3) !important;
   }
+  .var-fixed-input.show { display: block; }
 
-  .toggle-label {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    font-size: 13px;
-    color: var(--text2);
-    margin-bottom: 10px;
-    user-select: none;
+  .var-del-btn {
+    width: 28px; height: 28px; border-radius: 6px;
+    background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.2);
+    color: var(--error); font-size: 14px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s; flex-shrink: 0;
   }
-  .toggle {
-    width: 36px;
-    height: 20px;
-    background: var(--border);
-    border-radius: 100px;
-    position: relative;
-    transition: background 0.2s;
-    flex-shrink: 0;
+  .var-del-btn:hover { background: rgba(248,113,113,0.18); }
+
+  .var-source-col { display: flex; flex-direction: column; }
+
+  .section-divider {
+    display: flex; align-items: center; gap: 12px;
+    margin: 20px 0; color: var(--text2); font-size: 11px;
+    font-family: 'DM Mono', monospace; text-transform: uppercase; letter-spacing: 1px;
   }
-  .toggle::after {
-    content: '';
-    width: 14px;
-    height: 14px;
-    background: white;
-    border-radius: 50%;
-    position: absolute;
-    top: 3px;
-    left: 3px;
-    transition: transform 0.2s;
-  }
+  .section-divider::before, .section-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .toggle { width: 36px; height: 20px; background: var(--border); border-radius: 100px; position: relative; transition: background 0.2s; flex-shrink: 0; }
+  .toggle::after { content: ''; width: 14px; height: 14px; background: white; border-radius: 50%; position: absolute; top: 3px; left: 3px; transition: transform 0.2s; }
   input[type=checkbox]:checked + .toggle { background: var(--accent); }
   input[type=checkbox]:checked + .toggle::after { transform: translateX(16px); }
   input[type=checkbox] { display: none; }
-
   .diff-input { display: none; margin-top: 10px; }
   .diff-input.show { display: block; }
 
   .generate-btn {
-    width: 100%;
-    padding: 16px;
+    width: 100%; padding: 16px;
     background: linear-gradient(135deg, var(--accent), #9d4edd);
-    border: none;
-    border-radius: var(--radius);
-    color: white;
-    font-family: 'Syne', sans-serif;
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s;
-    letter-spacing: 0.5px;
-    position: relative;
-    overflow: hidden;
-    margin-top: 8px;
+    border: none; border-radius: var(--radius); color: white;
+    font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700;
+    cursor: pointer; transition: all 0.2s; letter-spacing: 0.5px;
+    position: relative; overflow: hidden; margin-top: 8px;
   }
-  .generate-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(124,106,255,0.35);
-  }
+  .generate-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(124,106,255,0.35); }
   .generate-btn:active { transform: translateY(0); }
   .generate-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-  .generate-btn::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
-    opacity: 0;
-    transition: opacity 0.2s;
-  }
+  .generate-btn::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent); opacity: 0; transition: opacity 0.2s; }
   .generate-btn:hover::before { opacity: 1; }
 
-  .progress-bar-wrap {
-    background: var(--surface2);
-    border-radius: 100px;
-    height: 6px;
-    margin-top: 16px;
-    overflow: hidden;
-    display: none;
-  }
+  .progress-bar-wrap { background: var(--surface2); border-radius: 100px; height: 6px; margin-top: 16px; overflow: hidden; display: none; }
   .progress-bar-wrap.show { display: block; }
-  .progress-bar {
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent), var(--accent3));
-    border-radius: 100px;
-    width: 0%;
-    transition: width 0.4s ease;
-  }
+  .progress-bar { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent3)); border-radius: 100px; width: 0%; transition: width 0.4s ease; }
 
   .log-box {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 16px;
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    color: var(--text2);
-    line-height: 1.8;
-    max-height: 220px;
-    overflow-y: auto;
-    display: none;
-    margin-top: 16px;
+    background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm);
+    padding: 16px; font-family: 'DM Mono', monospace; font-size: 12px;
+    color: var(--text2); line-height: 1.8; max-height: 220px; overflow-y: auto;
+    display: none; margin-top: 16px;
   }
   .log-box.show { display: block; }
   .log-line { display: flex; gap: 10px; }
@@ -403,188 +247,92 @@
   .log-line .tag-warn { color: var(--warning); }
   .log-line .tag-err { color: var(--error); }
 
-  .results-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 14px;
-    margin-top: 16px;
-  }
-
-  .result-card {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    animation: pop 0.3s ease both;
-  }
-
-  .result-group-name {
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 15px;
-    color: var(--accent);
-  }
-  .result-count {
-    font-family: 'DM Mono', monospace;
-    font-size: 22px;
-    font-weight: 500;
-    color: var(--text);
-  }
+  .results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; margin-top: 16px; }
+  .result-card { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px; display: flex; flex-direction: column; gap: 8px; animation: pop 0.3s ease both; }
+  .result-group-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; color: var(--accent); }
+  .result-count { font-family: 'DM Mono', monospace; font-size: 22px; font-weight: 500; color: var(--text); }
   .result-label { font-size: 11px; color: var(--text2); }
 
   .dl-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 9px 14px;
-    background: rgba(106,255,205,0.1);
-    border: 1px solid rgba(106,255,205,0.25);
-    border-radius: var(--radius-sm);
-    color: var(--accent3);
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-decoration: none;
-    margin-top: 4px;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 9px 14px; background: rgba(106,255,205,0.1);
+    border: 1px solid rgba(106,255,205,0.25); border-radius: var(--radius-sm);
+    color: var(--accent3); font-family: 'DM Mono', monospace; font-size: 11px;
+    cursor: pointer; transition: all 0.2s; text-decoration: none; margin-top: 4px;
   }
-  .dl-btn:hover {
-    background: rgba(106,255,205,0.18);
-    border-color: rgba(106,255,205,0.5);
-  }
+  .dl-btn:hover { background: rgba(106,255,205,0.18); border-color: rgba(106,255,205,0.5); }
 
   .dl-all-btn {
-    width: 100%;
-    padding: 14px;
+    width: 100%; padding: 14px;
     background: linear-gradient(135deg, rgba(106,255,205,0.15), rgba(124,106,255,0.1));
-    border: 1px solid rgba(106,255,205,0.3);
-    border-radius: var(--radius);
-    color: var(--accent3);
-    font-family: 'Syne', sans-serif;
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s;
-    margin-top: 16px;
-    display: none;
+    border: 1px solid rgba(106,255,205,0.3); border-radius: var(--radius);
+    color: var(--accent3); font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700;
+    cursor: pointer; transition: all 0.2s; margin-top: 16px; display: none;
   }
-  .dl-all-btn.show {
-    display: block;
-    animation: fadeUp 0.4s ease both;
-  }
-  .dl-all-btn:hover {
-    background: linear-gradient(135deg, rgba(106,255,205,0.25), rgba(124,106,255,0.2));
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(106,255,205,0.15);
-  }
+  .dl-all-btn.show { display: block; animation: fadeUp 0.4s ease both; }
+  .dl-all-btn:hover { background: linear-gradient(135deg, rgba(106,255,205,0.25), rgba(124,106,255,0.2)); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(106,255,205,0.15); }
 
   .sample-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    color: var(--accent);
-    font-size: 12px;
-    font-family: 'DM Mono', monospace;
-    text-decoration: none;
-    border: 1px solid rgba(124,106,255,0.3);
-    padding: 5px 12px;
-    border-radius: 6px;
-    transition: all 0.2s;
-    cursor: pointer;
-    background: rgba(124,106,255,0.07);
-    margin-top: 10px;
+    display: inline-flex; align-items: center; gap: 6px; color: var(--accent);
+    font-size: 12px; font-family: 'DM Mono', monospace; text-decoration: none;
+    border: 1px solid rgba(124,106,255,0.3); padding: 5px 12px; border-radius: 6px;
+    transition: all 0.2s; cursor: pointer; background: rgba(124,106,255,0.07); margin-top: 10px;
   }
   .sample-link:hover { background: rgba(124,106,255,0.15); }
 
-  @keyframes fadeDown {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes pop {
-    from { opacity: 0; transform: scale(0.92); }
-    to { opacity: 1; transform: scale(1); }
-  }
-
-  .hint {
-    font-size: 11px;
-    color: var(--text2);
-    margin-top: 4px;
-    font-family: 'DM Mono', monospace;
-  }
-
-  .separator { height: 1px; background: var(--border); margin: 24px 0; }
-
   .tag-badge {
-    display: inline-block;
-    background: rgba(124,106,255,0.12);
-    border: 1px solid rgba(124,106,255,0.2);
-    border-radius: 4px;
-    padding: 1px 7px;
-    font-size: 10px;
-    font-family: 'DM Mono', monospace;
-    color: var(--accent);
-    margin-right: 4px;
+    display: inline-block; background: rgba(124,106,255,0.12); border: 1px solid rgba(124,106,255,0.2);
+    border-radius: 4px; padding: 1px 7px; font-size: 10px;
+    font-family: 'DM Mono', monospace; color: var(--accent); margin-right: 4px;
   }
 
-  .section-divider {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin: 8px 0 20px;
-    color: var(--text2);
-    font-size: 11px;
-    font-family: 'DM Mono', monospace;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-  .section-divider::before, .section-divider::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
+  .hint { font-size: 11px; color: var(--text2); margin-top: 4px; font-family: 'DM Mono', monospace; }
+
+  .alert { padding: 12px 16px; border-radius: var(--radius-sm); font-size: 13px; margin-top: 12px; display: none; }
+  .alert.error { background: rgba(248,113,113,0.1); border: 1px solid rgba(248,113,113,0.3); color: var(--error); display: block; }
+  .alert.success { background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.3); color: var(--success); display: block; }
 
   #groupsSection { display: none; }
   #resultsSection { display: none; }
 
-  .alert {
-    padding: 12px 16px;
-    border-radius: var(--radius-sm);
-    font-size: 13px;
-    margin-top: 12px;
-    display: none;
-  }
-  .alert.error { background: rgba(248,113,113,0.1); border: 1px solid rgba(248,113,113,0.3); color: var(--error); display: block; }
-  .alert.success { background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.3); color: var(--success); display: block; }
+  @keyframes fadeDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeUp   { from { opacity: 0; transform: translateY(20px);  } to { opacity: 1; transform: translateY(0); } }
+  @keyframes pop      { from { opacity: 0; transform: scale(0.92); }       to { opacity: 1; transform: scale(1); } }
 
   ::-webkit-scrollbar { width: 6px; height: 6px; }
   ::-webkit-scrollbar-track { background: var(--surface); }
   ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
   ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+  /* add-var button */
+  .add-var-btn {
+    display: flex; align-items: center; gap: 8px; padding: 10px 16px;
+    background: rgba(124,106,255,0.08); border: 1px dashed rgba(124,106,255,0.35);
+    border-radius: var(--radius-sm); color: var(--accent);
+    font-family: 'DM Mono', monospace; font-size: 12px;
+    cursor: pointer; transition: all 0.2s; width: 100%; margin-top: 10px; justify-content: center;
+  }
+  .add-var-btn:hover { background: rgba(124,106,255,0.16); border-color: rgba(124,106,255,0.6); }
+
+  @media (max-width: 600px) {
+    .var-row { grid-template-columns: 24px 1fr auto; }
+    .var-source-col { grid-column: 1 / -1; margin-top: -4px; }
+  }
 </style>
 </head>
 <body>
-
 <div class="glow-orb glow-orb-1"></div>
 <div class="glow-orb glow-orb-2"></div>
-
 <div class="container">
 
+  <!-- Header -->
   <header>
     <div class="logo-badge">WATI Report Generator</div>
     <h1>Payment → WATI CSV</h1>
     <p class="subtitle">Automate your batch group assignment & WATI file generation</p>
   </header>
 
-  <!-- Step 1 -->
+  <!-- ── Step 1: Funnel & Workshop ── -->
   <div class="card" style="animation-delay:0.1s">
     <div class="card-header">
       <div class="step-num">1</div>
@@ -632,7 +380,7 @@
     </div>
   </div>
 
-  <!-- Step 2 -->
+  <!-- ── Step 2: Files ── -->
   <div class="card" style="animation-delay:0.2s">
     <div class="card-header">
       <div class="step-num">2</div>
@@ -641,7 +389,6 @@
         <div class="card-subtitle">Payment report CSV and batch change sheet CSV</div>
       </div>
     </div>
-
     <div class="form-row">
       <div class="field">
         <label>Payment Report CSV <span class="req">*</span></label>
@@ -665,51 +412,69 @@
     </div>
   </div>
 
-  <!-- Step 3 -->
-  <div class="card" id="groupsSection" style="animation-delay:0.3s">
+  <!-- ── Step 3: Custom Variables ── -->
+  <div class="card" style="animation-delay:0.25s">
     <div class="card-header">
       <div class="step-num">3</div>
       <div>
+        <div class="card-title">WATI Broadcast Variables</div>
+        <div class="card-subtitle">Define custom column names exactly as your WATI template expects</div>
+      </div>
+    </div>
+
+    <!-- Constants info -->
+    <div style="margin-bottom:18px;">
+      <div class="const-label" style="margin-bottom:8px;">These columns are always fixed (same name every time):</div>
+      <div class="constants-row">
+        <span class="const-pill">CountryCode</span>
+        <span class="const-pill">Phone</span>
+        <span class="const-pill">AllowBroadcast</span>
+        <span class="const-pill">AllowSMS</span>
+        <span class="const-pill">email</span>
+        <span class="const-pill">amount</span>
+      </div>
+    </div>
+
+    <div class="section-divider">Your custom variable columns</div>
+
+    <!-- Variable count row -->
+    <div class="var-count-row">
+      <label>How many extra variables?</label>
+      <button class="var-count-btn" onclick="changeVarCount(-1)">−</button>
+      <input type="number" id="varCount" class="var-count-input" value="5" min="0" max="20" oninput="onVarCountInput()" />
+      <button class="var-count-btn" onclick="changeVarCount(1)">+</button>
+      <span class="hint" style="margin:0">(columns after the fixed ones)</span>
+    </div>
+
+    <!-- Variable rows list -->
+    <div class="vars-list" id="varsList"></div>
+    <button class="add-var-btn" onclick="addVarRow()">＋ Add another variable</button>
+  </div>
+
+  <!-- ── Step 4: Groups Config ── -->
+  <div class="card" id="groupsSection" style="animation-delay:0.3s">
+    <div class="card-header">
+      <div class="step-num">4</div>
+      <div>
         <div class="card-title">Group Configuration</div>
-        <div class="card-subtitle">Zoom link & Webinar ID per group (optional)</div>
+        <div class="card-subtitle">Per-group overrides for any variable that differs by group</div>
       </div>
     </div>
-
-    <div class="form-row" style="margin-bottom:20px">
-      <div class="field">
-        <label>Default Zoom Link</label>
-        <input type="text" id="defaultZoomLink" placeholder="https://zoom.us/j/..." />
-      </div>
-      <div class="field">
-        <label>Default Webinar ID</label>
-        <input type="text" id="defaultWebinarId" placeholder="e.g. 123 456 7890" />
-      </div>
-    </div>
-
-    <div class="section-divider">Per-Group Overrides</div>
     <div class="groups-container" id="groupsContainer"></div>
   </div>
 
-  <!-- Step 4 -->
+  <!-- ── Step 5: Generate ── -->
   <div class="card" style="animation-delay:0.4s">
     <div class="card-header">
-      <div class="step-num">4</div>
+      <div class="step-num">5</div>
       <div>
         <div class="card-title">Generate WATI Files</div>
         <div class="card-subtitle">Process and download one CSV per group</div>
       </div>
     </div>
-
     <div id="alertBox"></div>
-
-    <button class="generate-btn" onclick="generate()" id="genBtn">
-      ⚡ Generate WATI CSVs
-    </button>
-
-    <div class="progress-bar-wrap" id="progressWrap">
-      <div class="progress-bar" id="progressBar"></div>
-    </div>
-
+    <button class="generate-btn" onclick="generate()" id="genBtn">⚡ Generate WATI CSVs</button>
+    <div class="progress-bar-wrap" id="progressWrap"><div class="progress-bar" id="progressBar"></div></div>
     <div class="log-box" id="logBox"></div>
   </div>
 
@@ -717,10 +482,7 @@
   <div class="card" id="resultsSection" style="animation-delay:0.1s">
     <div class="card-header">
       <div class="step-num">✓</div>
-      <div>
-        <div class="card-title">Download Results</div>
-        <div class="card-subtitle">One WATI CSV generated per group</div>
-      </div>
+      <div><div class="card-title">Download Results</div><div class="card-subtitle">One WATI CSV generated per group</div></div>
     </div>
     <div class="results-grid" id="resultsGrid"></div>
     <div style="display:flex;gap:12px;flex-wrap:wrap;">
@@ -729,381 +491,483 @@
     </div>
   </div>
 
-</div>
-
+</div><!-- /container -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script>
 
-// ─── FUNNEL CONFIG ────────────────────────────────────────────────────────────
-// Each funnel has:
-//   slugConditions : array of { type: 'contains'|'exact', value: string }
-//   amountMax      : number — row qualifies only if amount < this value
-//                    Use Infinity to skip the amount check entirely
-//
-// Logic applied per row:
-//   1. slug matches ANY slugCondition  (contains = substring, exact = full match)
-//   AND
-//   2. amount < amountMax
-
+// ═══════════════════════════════════════════════════════════════════════════════
+// FUNNEL CONFIG
+// ═══════════════════════════════════════════════════════════════════════════════
 const FUNNEL_CONFIG = {
-  Excel: {
-    label: 'Excel Workshop',
-    amountMax: 1000,
-    slugConditions: [
-      { type: 'contains', value: 'excel-workshop' },
-      { type: 'contains', value: 'excel-using-ai' }
-    ]
-  },
-  SMAI: {
-    label: 'SMAI (Stock Market)',
-    amountMax: 1000,
-    slugConditions: [
-      { type: 'contains', value: 'stock-market-ga' },
-      { type: 'contains', value: 'stock-market-trading-workshop' },
-      { type: 'contains', value: 'stock-market-pu' }
-    ]
-  },
-  Python: {
-    label: 'Python Using AI Workshop',
-    amountMax: 1000,
-    slugConditions: [
-      { type: 'contains', value: 'at01' },
-      { type: 'contains', value: 'python-using-ai' }
-    ]
-  },
-  '10xTechies': {
-    label: '10x Techies Workshop',
-    amountMax: 1000,
-    slugConditions: [
-      { type: 'contains', value: '10x-techies' }
-    ]
-  },
-  DrFinance: {
-    label: 'Dr. Finance Workshop',
-    amountMax: 1000,
-    slugConditions: [
-      { type: 'contains', value: 'personal-finance' }
-    ]
-  },
-  AITV: {
-    label: 'AITV Workshop',
-    amountMax: 1000,
-    slugConditions: [
-      { type: 'exact', value: 'aitv-app' },
-      { type: 'exact', value: 'aitvapp' }
-    ]
-  },
-  AI: {
-    label: 'AI Tools Workshop',
-    amountMax: 1000,
-    slugConditions: [
-      { type: 'contains', value: 'ai-tools-workshop' }
-    ]
-  },
-  SQL: {
-    label: 'SQL Workshop',
-    amountMax: Infinity,
-    slugConditions: [
-      { type: 'contains', value: 'sqlai' }
-    ]
-  },
-  DRF: {
-    label: 'DRF Workshop',
-    amountMax: Infinity,
-    slugConditions: [
-      { type: 'contains', value: 'personal-finance' }
-    ]
-  },
-  CAW: {
-    label: 'Cricket Analytics Workshop',
-    amountMax: Infinity,
-    slugConditions: [
-      { type: 'contains', value: '5-day-cricket-analytics-workshop' }
-    ]
-  },
-  PBI: {
-    label: 'Power BI Workshop',
-    amountMax: Infinity,
-    slugConditions: [
-      { type: 'contains', value: 'powerbi-mastery' }
-    ]
-  }
+  Excel:      { label:'Excel Workshop',          amountMax:1000,   slugConditions:[{type:'contains',value:'excel-workshop'},{type:'contains',value:'excel-using-ai'}] },
+  SMAI:       { label:'SMAI (Stock Market)',      amountMax:1000,   slugConditions:[{type:'contains',value:'stock-market-ga'},{type:'contains',value:'stock-market-trading-workshop'},{type:'contains',value:'stock-market-pu'}] },
+  Python:     { label:'Python Using AI',         amountMax:1000,   slugConditions:[{type:'contains',value:'at01'},{type:'contains',value:'python-using-ai'}] },
+  '10xTechies':{ label:'10x Techies Workshop',  amountMax:1000,   slugConditions:[{type:'contains',value:'10x-techies'}] },
+  DrFinance:  { label:'Dr. Finance Workshop',    amountMax:1000,   slugConditions:[{type:'contains',value:'personal-finance'}] },
+  AITV:       { label:'AITV Workshop',           amountMax:1000,   slugConditions:[{type:'exact',value:'aitv-app'},{type:'exact',value:'aitvapp'}] },
+  AI:         { label:'AI Tools Workshop',       amountMax:1000,   slugConditions:[{type:'contains',value:'ai-tools-workshop'}] },
+  SQL:        { label:'SQL Workshop',            amountMax:Infinity,slugConditions:[{type:'contains',value:'sqlai'}] },
+  DRF:        { label:'DRF Workshop',            amountMax:Infinity,slugConditions:[{type:'contains',value:'personal-finance'}] },
+  CAW:        { label:'Cricket Analytics',       amountMax:Infinity,slugConditions:[{type:'contains',value:'5-day-cricket-analytics-workshop'}] },
+  PBI:        { label:'Power BI Workshop',       amountMax:Infinity,slugConditions:[{type:'contains',value:'powerbi-mastery'}] }
 };
 
-// ─── Row matching: slug AND amount ──────────────────────────────────────────
-// Returns true if the row's slug matches the funnel's conditions
-// AND its amount is below the funnel's amountMax threshold.
-function rowMatchesFunnel(slug, amount, funnel) {
-  const config = FUNNEL_CONFIG[funnel];
-  if (!config) return false;
+// ═══════════════════════════════════════════════════════════════════════════════
+// CONSTANTS — these columns are ALWAYS in the output with fixed names
+// ═══════════════════════════════════════════════════════════════════════════════
+const FIXED_COLS = ['CountryCode','Phone','AllowBroadcast','AllowSMS','email','amount'];
 
-  // 1. Check slug
-  const s = slug.toLowerCase().trim();
-  const slugOk = config.slugConditions.some(c =>
-    c.type === 'exact' ? s === c.value : s.includes(c.value)
-  );
-  if (!slugOk) return false;
+// ═══════════════════════════════════════════════════════════════════════════════
+// VARIABLE SYSTEM
+// Each variable = { name: string, source: string }
+// source values:
+//   '__fixed__'           → user types a static value (varFixedVal)
+//   '__name__'            → customer name from payment report
+//   '__date__'            → workshop date input
+//   '__time__'            → workshop time input
+//   '__funnel__'          → funnel key
+//   '__wa_group__'        → WA group name (GX replaced per group)
+//   '__amount_date__'     → CreatedAt from payment report
+//   '__age__'             → age group from payment report
+//   'COLNAME'             → raw column value from payment CSV (auto-detected cols)
+//
+// During generate() we also inject per-group overrides:
+//   For variables whose name is found in groupVarOverrides[groupId],
+//   that override value is used instead.
+// ═══════════════════════════════════════════════════════════════════════════════
 
-  // 2. Check amount (only if amountMax is finite)
-  if (isFinite(config.amountMax)) {
-    // Parse amount: strip currency symbols, commas, spaces
-    const amtNum = parseFloat(
-      amount.toString().replace(/[₹$,\s]/g, '').trim()
-    );
-    if (isNaN(amtNum) || amtNum >= config.amountMax) return false;
-  }
+// Predefined source options (always available regardless of CSV headers)
+const BUILTIN_SOURCES = [
+  { value: '__name__',        label: 'Customer Name (from payment CSV)' },
+  { value: '__date__',        label: 'Workshop Date (your input)' },
+  { value: '__time__',        label: 'Workshop Time (your input)' },
+  { value: '__funnel__',      label: 'Funnel / Batch name' },
+  { value: '__wa_group__',    label: 'WhatsApp Group Name' },
+  { value: '__amount_date__', label: 'Payment Date (CreatedAt)' },
+  { value: '__age__',         label: 'Age Group (from payment CSV)' },
+  { value: '__fixed__',       label: '✏️ Fixed text (type it below)' },
+];
 
-  return true;
+// Detected payment CSV columns will be appended at runtime
+let detectedPaymentCols = []; // array of header strings
+let detectedGroups      = [];
+let generatedFiles      = {};
+let varIdCounter        = 0;
+
+// Default variable template (matches old hardcoded output)
+const DEFAULT_VARS = [
+  { name: 'name',          source: '__name__',        fixedVal: '' },
+  { name: 'Amount_Date',   source: '__amount_date__',  fixedVal: '' },
+  { name: 'Age',           source: '__age__',          fixedVal: '' },
+  { name: 'date',          source: '__date__',         fixedVal: '' },
+  { name: 'time',          source: '__time__',         fixedVal: '' },
+  { name: 'batch',         source: '__funnel__',       fixedVal: '' },
+  { name: 'whatsapp_link', source: '__wa_group__',     fixedVal: '' },
+  { name: 'zoom_link',     source: '__fixed__',        fixedVal: '' },
+  { name: 'webinar_id',    source: '__fixed__',        fixedVal: '' },
+];
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// VAR UI — build rows
+// ═══════════════════════════════════════════════════════════════════════════════
+function buildSourceOptions(selectedVal) {
+  const allSources = [
+    { value: '', label: '— pick source —' },
+    ...BUILTIN_SOURCES,
+    ...(detectedPaymentCols.length
+      ? [{ value: '__sep__', label: '── CSV Columns ──', disabled: true }]
+      : []),
+    ...detectedPaymentCols.map(c => ({ value: 'col:' + c, label: c + ' (CSV column)' }))
+  ];
+  return allSources.map(s =>
+    `<option value="${s.value}" ${s.disabled?'disabled':''} ${s.value===selectedVal?'selected':''}>${s.label}</option>`
+  ).join('');
 }
 
-// ─── State ────────────────────────────────────────────────────────────────────
-let detectedGroups = [];
-let generatedFiles = {};
+function renderVarsList() {
+  const list   = document.getElementById('varsList');
+  const items  = getVarItems();         // read current DOM state before re-render
+  list.innerHTML = '';
+  items.forEach((v, i) => appendVarRowDOM(i, v));
+  document.getElementById('varCount').value = items.length;
+}
 
-// ─── UI Helpers ───────────────────────────────────────────────────────────────
+function getVarItems() {
+  // Collect current state from DOM
+  const rows = document.querySelectorAll('.var-row');
+  return Array.from(rows).map(row => ({
+    name:     row.querySelector('.var-name-input')?.value  || '',
+    source:   row.querySelector('.var-source-select')?.value || '',
+    fixedVal: row.querySelector('.var-fixed-input')?.value || ''
+  }));
+}
+
+function appendVarRowDOM(i, v = {}) {
+  const id  = ++varIdCounter;
+  const list = document.getElementById('varsList');
+
+  const div = document.createElement('div');
+  div.className = 'var-row';
+  div.dataset.varid = id;
+
+  div.innerHTML = `
+    <div class="var-idx">${i + 1}</div>
+    <div class="field" style="gap:4px">
+      <input class="var-name-input" type="text"
+        placeholder="variable name (e.g. zoom_link)"
+        value="${escHtml(v.name || '')}"
+        title="This becomes the CSV column header in the WATI file" />
+      <div class="hint" style="margin:0">Column header name in WATI CSV</div>
+    </div>
+    <div class="var-source-col field" style="gap:4px">
+      <select class="var-source-select ${v.source ? 'has-val' : ''}"
+        onchange="onSourceChange(this)">
+        ${buildSourceOptions(v.source || '')}
+      </select>
+      <input class="var-fixed-input ${v.source === '__fixed__' ? 'show' : ''}"
+        type="text" placeholder="Type the fixed value here…"
+        value="${escHtml(v.fixedVal || '')}" />
+      <div class="hint" style="margin:0">Where does this value come from?</div>
+    </div>
+    <button class="var-del-btn" onclick="deleteVarRow(this)" title="Remove this variable">✕</button>
+  `;
+
+  list.appendChild(div);
+}
+
+function addVarRow(v) {
+  const list  = document.getElementById('varsList');
+  const count = list.querySelectorAll('.var-row').length;
+  appendVarRowDOM(count, v || {});
+  reIndexRows();
+  document.getElementById('varCount').value = list.querySelectorAll('.var-row').length;
+}
+
+function deleteVarRow(btn) {
+  btn.closest('.var-row').remove();
+  reIndexRows();
+  document.getElementById('varCount').value = document.querySelectorAll('.var-row').length;
+}
+
+function reIndexRows() {
+  document.querySelectorAll('.var-row').forEach((row, i) => {
+    row.querySelector('.var-idx').textContent = i + 1;
+  });
+}
+
+function onSourceChange(sel) {
+  sel.classList.toggle('has-val', !!sel.value);
+  const fixedInput = sel.closest('.var-source-col').querySelector('.var-fixed-input');
+  fixedInput.classList.toggle('show', sel.value === '__fixed__');
+}
+
+function changeVarCount(delta) {
+  const inp = document.getElementById('varCount');
+  const cur = parseInt(inp.value) || 0;
+  const next = Math.max(0, Math.min(20, cur + delta));
+  inp.value = next;
+  syncVarCount(next);
+}
+
+function onVarCountInput() {
+  const v = parseInt(document.getElementById('varCount').value) || 0;
+  syncVarCount(Math.max(0, Math.min(20, v)));
+}
+
+function syncVarCount(target) {
+  const list = document.getElementById('varsList');
+  let current = list.querySelectorAll('.var-row').length;
+  while (current < target) { appendVarRowDOM(current, {}); current++; }
+  while (current > target) {
+    const rows = list.querySelectorAll('.var-row');
+    if (!rows.length) break;
+    rows[rows.length - 1].remove();
+    current--;
+  }
+  reIndexRows();
+}
+
+// Refresh source dropdowns after CSV is loaded (to add CSV column options)
+function refreshSourceDropdowns() {
+  document.querySelectorAll('.var-source-select').forEach(sel => {
+    const cur = sel.value;
+    sel.innerHTML = buildSourceOptions(cur);
+    sel.classList.toggle('has-val', !!cur && cur !== '');
+  });
+}
+
+// Init with default variables
+function initDefaultVars() {
+  document.getElementById('varsList').innerHTML = '';
+  varIdCounter = 0;
+  DEFAULT_VARS.forEach((v, i) => appendVarRowDOM(i, v));
+  document.getElementById('varCount').value = DEFAULT_VARS.length;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// GROUP SECTION (per-group value overrides for any variable)
+// ═══════════════════════════════════════════════════════════════════════════════
+function renderGroupsUI() {
+  const container   = document.getElementById('groupsContainer');
+  const defaultName = document.getElementById('defaultGroupName').value.trim();
+  const vars        = getVarItems();
+
+  container.innerHTML = '';
+
+  detectedGroups.forEach((g, gi) => {
+    const waName = defaultName ? defaultName.replace(/GX/gi, g.groupId) : g.groupId;
+
+    // Only show override inputs for variables whose source is __fixed__ or __wa_group__
+    // (those are the ones that commonly differ per group, e.g. zoom link, webinar id)
+    // Actually: let user override ANY fixed-source variable per group
+    const overridableVars = vars.filter(v => v.source === '__fixed__' || v.name === 'whatsapp_link');
+
+    const overrideInputs = overridableVars.map((v, vi) => `
+      <div style="display:flex;flex-direction:column;gap:4px;min-width:180px">
+        <label style="text-transform:none;letter-spacing:0;font-size:11px;color:var(--text2);">
+          ${escHtml(v.name || `var_${vi+1}`)}
+        </label>
+        <input type="text" class="grp-override-input"
+          data-varname="${escHtml(v.name)}"
+          data-gi="${gi}"
+          placeholder="leave blank = default"
+          style="font-size:12px;padding:7px 10px;" />
+      </div>
+    `).join('');
+
+    container.innerHTML += `
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;margin-bottom:10px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;">
+          <div style="font-family:'DM Mono',monospace;font-size:12px;font-weight:600;color:var(--accent);
+            background:rgba(124,106,255,0.12);border:1px solid rgba(124,106,255,0.2);
+            border-radius:6px;padding:4px 10px;">${g.groupId}</div>
+          <div style="font-size:12px;color:var(--text2);font-family:'DM Mono',monospace">${g.label}</div>
+          <div style="font-size:11px;color:var(--text2);margin-left:auto;">${g.fromRaw||'—'} → ${g.toRaw||'—'}</div>
+        </div>
+        <div style="font-size:12px;color:var(--accent3);font-family:'DM Mono',monospace;margin-bottom:14px;">WA: ${escHtml(waName)}</div>
+        ${overrideInputs.length ? `
+          <div style="font-size:11px;color:var(--text2);font-family:'DM Mono',monospace;margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px;">Per-group overrides (fixed-value variables)</div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;">${overrideInputs}</div>
+        ` : `<div style="font-size:11px;color:var(--text2);font-family:'DM Mono',monospace;">No fixed-value variables to override.</div>`}
+      </div>`;
+  });
+}
+
+// Read group overrides: returns { [groupId]: { [varName]: overrideValue } }
+function getGroupOverrides() {
+  const result = {};
+  document.querySelectorAll('.grp-override-input').forEach(inp => {
+    const gi  = parseInt(inp.dataset.gi);
+    const g   = detectedGroups[gi];
+    if (!g) return;
+    const val = inp.value.trim();
+    if (!val) return;
+    if (!result[g.groupId]) result[g.groupId] = {};
+    result[g.groupId][inp.dataset.varname] = val;
+  });
+  return result;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// FUNNEL UI
+// ═══════════════════════════════════════════════════════════════════════════════
 function onFunnelChange() {
-  const f = document.getElementById('funnelSelect').value;
+  const f      = document.getElementById('funnelSelect').value;
   const config = FUNNEL_CONFIG[f];
-  const hint = document.getElementById('slugHint');
+  const hint   = document.getElementById('slugHint');
   if (!config) { hint.innerHTML = ''; return; }
-
   const slugDesc = config.slugConditions.map(c =>
-    `<span class="tag-badge">${c.type === 'exact' ? '=' : '~'} ${c.value}</span>`
+    `<span class="tag-badge">${c.type==='exact'?'=':'~'} ${c.value}</span>`
   ).join(' <span style="color:var(--text2);font-size:10px">OR</span> ');
-
-  const amtDesc = isFinite(config.amountMax)
-    ? `<span style="color:var(--warning);font-size:10px;margin-left:6px;">amount &lt; ${config.amountMax}</span>`
-    : '';
-
+  const amtDesc  = isFinite(config.amountMax)
+    ? `<span style="color:var(--warning);font-size:10px;margin-left:6px;">amount &lt; ${config.amountMax}</span>` : '';
   hint.innerHTML = slugDesc + amtDesc;
 }
 
 function onFileSelect(type) {
-  const fileInput = document.getElementById(type === 'payment' ? 'paymentFile' : 'batchFile');
-  const nameEl = document.getElementById(type === 'payment' ? 'paymentFileName' : 'batchFileName');
-  if (fileInput.files[0]) {
-    nameEl.textContent = '📎 ' + fileInput.files[0].name;
-    if (type === 'batch') parseBatchForGroups();
-  }
+  const fileInput = document.getElementById(type==='payment'?'paymentFile':'batchFile');
+  const nameEl    = document.getElementById(type==='payment'?'paymentFileName':'batchFileName');
+  if (!fileInput.files[0]) return;
+  nameEl.textContent = '📎 ' + fileInput.files[0].name;
+  if (type === 'batch')   parseBatchForGroups();
+  if (type === 'payment') sniffPaymentHeaders();
+}
+
+// Sniff payment CSV headers → populate detectedPaymentCols → refresh dropdowns
+function sniffPaymentHeaders() {
+  const file = document.getElementById('paymentFile').files[0];
+  if (!file) return;
+  Papa.parse(file, {
+    header: true, preview: 1, skipEmptyLines: true,
+    complete: function(r) {
+      detectedPaymentCols = r.meta.fields || [];
+      refreshSourceDropdowns();
+      log(`Payment CSV columns detected: ${detectedPaymentCols.join(', ')}`, 'info');
+    }
+  });
 }
 
 function onGroupNameChange() {
   if (detectedGroups.length) renderGroupsUI();
 }
 
-// ─── normalizeLabel ──────────────────────────────────────────────────────────
-// Converts any date-like string to a canonical lowercase alphanumeric form
-// so that "Mar", "March", "mar.", "MARCH" all collapse to the same token.
-//
-// Steps:
-//  1. Lowercase everything
-//  2. Expand ALL month abbreviations (3-letter) → full month name
-//     e.g. "mar" → "march", "feb" → "february"
-//  3. Strip ordinal suffixes: "8th" → "8", "1st" → "1"
-//  4. Strip all non-alphanumeric characters
-//
-// Result: "8th March" → "8march"
-//         "Mar 8"     → "march8"   ← same tokens, different order, but both
-//         "8 Mar"     → "8march"      will match if one contains the other
+// ═══════════════════════════════════════════════════════════════════════════════
+// FUZZY DATE / LABEL HELPERS
+// ═══════════════════════════════════════════════════════════════════════════════
 function normalizeLabel(str) {
   const monthMap = {
-    jan: 'january', feb: 'february', mar: 'march',  apr: 'april',
-    may: 'may',     jun: 'june',     jul: 'july',   aug: 'august',
-    sep: 'september', oct: 'october', nov: 'november', dec: 'december'
+    jan:'january',feb:'february',mar:'march',apr:'april',
+    may:'may',jun:'june',jul:'july',aug:'august',
+    sep:'september',oct:'october',nov:'november',dec:'december'
   };
   let s = str.toLowerCase();
-
-  // Expand 3-letter month abbreviations to full month names.
-  // Word-boundary (\b) ensures "march" stays "march" (not "marchch").
-  s = s.replace(/\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\b/g,
-    m => monthMap[m] || m);
-
-  // Strip ordinal suffixes: 8th→8, 1st→1, 22nd→22, 3rd→3
-  s = s.replace(/\b(\d+)(st|nd|rd|th)\b/g, '$1');
-
-  // Strip everything that isn't a letter or digit
-  s = s.replace(/[^a-z0-9]/g, '');
-
+  s = s.replace(/\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\b/g, m => monthMap[m]||m);
+  s = s.replace(/\b(\d+)(st|nd|rd|th)\b/g,'$1');
+  s = s.replace(/[^a-z0-9]/g,'');
   return s;
 }
 
-// ─── parseDatetime ────────────────────────────────────────────────────────────
 function parseDatetime(str) {
   if (!str) return null;
   str = str.toString().trim();
-  let day, mon, yr, hr = 0, min = 0, sec = 0;
-
+  let day,mon,yr,hr=0,min=0,sec=0;
   const isoM = str.match(/^(\d{4})[\-\/](\d{1,2})[\-\/](\d{1,2})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?)?/);
-  if (isoM && parseInt(isoM[1]) > 1900) {
-    yr = parseInt(isoM[1]); mon = parseInt(isoM[2])-1; day = parseInt(isoM[3]);
-    hr = parseInt(isoM[4]||0); min = parseInt(isoM[5]||0); sec = parseInt(isoM[6]||0);
-    const d = new Date(yr,mon,day,hr,min,sec);
-    if (!isNaN(d.getTime())) return d;
+  if (isoM && parseInt(isoM[1])>1900) {
+    yr=parseInt(isoM[1]);mon=parseInt(isoM[2])-1;day=parseInt(isoM[3]);
+    hr=parseInt(isoM[4]||0);min=parseInt(isoM[5]||0);sec=parseInt(isoM[6]||0);
+    const d=new Date(yr,mon,day,hr,min,sec); if(!isNaN(d.getTime())) return d;
   }
-
   const dmyM = str.match(/^(\d{1,2})[\-\/](\d{1,2})[\-\/](\d{4})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?)?/);
   if (dmyM) {
-    const d1=parseInt(dmyM[1]), d2=parseInt(dmyM[2]);
-    yr=parseInt(dmyM[3]); hr=parseInt(dmyM[4]||0); min=parseInt(dmyM[5]||0); sec=parseInt(dmyM[6]||0);
-    if (d1>12)      { day=d1; mon=d2-1; }
-    else if (d2>12) { mon=d1-1; day=d2; }
-    else            { day=d1; mon=d2-1; }
-    const d=new Date(yr,mon,day,hr,min,sec);
-    if (!isNaN(d.getTime())) return d;
+    const d1=parseInt(dmyM[1]),d2=parseInt(dmyM[2]);
+    yr=parseInt(dmyM[3]);hr=parseInt(dmyM[4]||0);min=parseInt(dmyM[5]||0);sec=parseInt(dmyM[6]||0);
+    if(d1>12){day=d1;mon=d2-1;}else if(d2>12){mon=d1-1;day=d2;}else{day=d1;mon=d2-1;}
+    const d=new Date(yr,mon,day,hr,min,sec); if(!isNaN(d.getTime())) return d;
   }
   return null;
 }
 
-// ─── parsePhone ───────────────────────────────────────────────────────────────
 function parsePhone(raw) {
-  if (!raw) return { countryCode: '', phone: '' };
+  if (!raw) return {countryCode:'',phone:''};
   let cleaned = raw.toString().replace(/['\+\s"]/g,'').trim();
-  if (/^\d+\.?\d*[eE][+\-]?\d+$/.test(cleaned)||cleaned.includes('E')||cleaned.includes('e')) {
-    try { cleaned = Math.round(Number(raw.toString().replace(/['"]/g,''))).toString(); } catch(e) {}
+  if(/^\d+\.?\d*[eE][+\-]?\d+$/.test(cleaned)||cleaned.includes('E')||cleaned.includes('e')){
+    try{cleaned=Math.round(Number(raw.toString().replace(/['"]/g,''))).toString();}catch(e){}
   }
   try {
-    if (window.libphonenumber && cleaned.length>=10) {
-      const parsed = window.libphonenumber.parsePhoneNumber('+'+cleaned);
-      if (parsed && parsed.isValid()) {
-        return { countryCode: String(parsed.countryCallingCode), phone: String(parsed.nationalNumber) };
-      }
+    if(window.libphonenumber&&cleaned.length>=10){
+      const p=window.libphonenumber.parsePhoneNumber('+'+cleaned);
+      if(p&&p.isValid()) return {countryCode:String(p.countryCallingCode),phone:String(p.nationalNumber)};
     }
   } catch(e) {}
-  if (cleaned.length===12&&cleaned.startsWith('91')) return { countryCode:'91', phone:cleaned.slice(2) };
-  if (cleaned.length===11&&cleaned.startsWith('1'))  return { countryCode:'1',  phone:cleaned.slice(1) };
-  if (cleaned.length===12&&cleaned.startsWith('44')) return { countryCode:'44', phone:cleaned.slice(2) };
-  if (cleaned.length===12&&cleaned.startsWith('61')) return { countryCode:'61', phone:cleaned.slice(2) };
-  if (cleaned.length===12&&cleaned.startsWith('65')) return { countryCode:'65', phone:cleaned.slice(2) };
-  return { countryCode:'', phone:cleaned };
+  if(cleaned.length===12&&cleaned.startsWith('91')) return {countryCode:'91',phone:cleaned.slice(2)};
+  if(cleaned.length===11&&cleaned.startsWith('1'))  return {countryCode:'1', phone:cleaned.slice(1)};
+  if(cleaned.length===12&&cleaned.startsWith('44')) return {countryCode:'44',phone:cleaned.slice(2)};
+  if(cleaned.length===12&&cleaned.startsWith('61')) return {countryCode:'61',phone:cleaned.slice(2)};
+  if(cleaned.length===12&&cleaned.startsWith('65')) return {countryCode:'65',phone:cleaned.slice(2)};
+  return {countryCode:'',phone:cleaned};
 }
 
-// ─── parseBatchRaw ────────────────────────────────────────────────────────────
+function rowMatchesFunnel(slug, amount, funnel) {
+  const config = FUNNEL_CONFIG[funnel]; if(!config) return false;
+  const s = slug.toLowerCase().trim();
+  const slugOk = config.slugConditions.some(c => c.type==='exact'?s===c.value:s.includes(c.value));
+  if(!slugOk) return false;
+  if(isFinite(config.amountMax)){
+    const amtNum = parseFloat(amount.toString().replace(/[₹$,\s]/g,'').trim());
+    if(isNaN(amtNum)||amtNum>=config.amountMax) return false;
+  }
+  return true;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// BATCH PARSING
+// ═══════════════════════════════════════════════════════════════════════════════
 function parseBatchRaw(data) {
   const groups = [];
   data.forEach(row => {
-    const label   = (row[0]||'').toString().trim();
-    const fromStr = (row[1]||'').toString().trim();
-    const toStr   = (row[2]||'').toString().trim();
-    if (!label) return;
-    if (!/\bG\d[\d\-]*/i.test(label)) return;
-    const tokens = label.split(/\s+/);
-    const groupPart = tokens[tokens.length-1];
-    if (!/^G\d/i.test(groupPart)) return;
-    const fromDt = parseDatetime(fromStr);
-    const toDt   = parseDatetime(toStr);
-    groups.push({
-      label, groupId: groupPart.toUpperCase(),
-      from: fromDt, to: toDt, fromRaw: fromStr, toRaw: toStr
-    });
+    const label=(row[0]||'').toString().trim();
+    const fromStr=(row[1]||'').toString().trim();
+    const toStr=(row[2]||'').toString().trim();
+    if(!label) return;
+    if(!/\bG\d[\d\-]*/i.test(label)) return;
+    const tokens=label.split(/\s+/);
+    const groupPart=tokens[tokens.length-1];
+    if(!/^G\d/i.test(groupPart)) return;
+    groups.push({label,groupId:groupPart.toUpperCase(),from:parseDatetime(fromStr),to:parseDatetime(toStr),fromRaw:fromStr,toRaw:toStr});
   });
   return groups;
 }
 
-// ─── filterGroupsByDate ───────────────────────────────────────────────────────
-// Uses normalizeLabel on BOTH the user's workshopDate input and the batch
-// group labels. Because normalizeLabel expands "Mar" → "march" on both sides
-// before stripping non-alphanumeric, "Mar" and "March" become identical tokens
-// and will always match each other.
 function filterGroupsByDate(allGroups, workshopDate) {
-  if (!workshopDate) return allGroups;
-  const kw = normalizeLabel(workshopDate); // e.g. "8march", "15march"
-  return allGroups.filter(g => {
-    const lc = normalizeLabel(g.label);  // batch label also normalized
-    return lc.includes(kw);
-  });
+  if(!workshopDate) return allGroups;
+  const kw=normalizeLabel(workshopDate);
+  return allGroups.filter(g=>normalizeLabel(g.label).includes(kw));
 }
 
-// ─── parseBatchForGroups ──────────────────────────────────────────────────────
 function parseBatchForGroups() {
-  const file = document.getElementById('batchFile').files[0];
-  if (!file) return;
-  Papa.parse(file, {
-    header: false, skipEmptyLines: true,
-    complete: function(results) {
-      const allGroups = parseBatchRaw(results.data);
-      const workshopDate = document.getElementById('workshopDate').value.trim();
-      let matched = filterGroupsByDate(allGroups, workshopDate);
-      if (matched.length===0) matched = allGroups;
-      detectedGroups = matched;
-      if (detectedGroups.length>0) {
-        document.getElementById('groupsSection').style.display='block';
-        renderGroupsUI();
-      }
+  const file=document.getElementById('batchFile').files[0]; if(!file) return;
+  Papa.parse(file,{header:false,skipEmptyLines:true,complete:function(results){
+    const allGroups=parseBatchRaw(results.data);
+    const workshopDate=document.getElementById('workshopDate').value.trim();
+    let matched=filterGroupsByDate(allGroups,workshopDate);
+    if(matched.length===0) matched=allGroups;
+    detectedGroups=matched;
+    if(detectedGroups.length>0){
+      document.getElementById('groupsSection').style.display='block';
+      renderGroupsUI();
     }
-  });
+  }});
 }
 
-function renderGroupsUI() {
-  const container  = document.getElementById('groupsContainer');
-  const defaultName = document.getElementById('defaultGroupName').value.trim();
-  container.innerHTML = '';
-  detectedGroups.forEach((g,i) => {
-    const waName   = defaultName ? defaultName.replace(/GX/gi, g.groupId) : g.groupId;
-    const fromLabel = g.fromRaw || '—';
-    const toLabel   = g.toRaw   || '—';
-    container.innerHTML += `
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;margin-bottom:8px;">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;">
-          <div class="group-tag">${g.groupId}</div>
-          <div style="font-size:12px;color:var(--text2);font-family:'DM Mono',monospace">${g.label}</div>
-          <div style="font-size:11px;color:var(--text2);margin-left:auto;">${fromLabel} → ${toLabel}</div>
-        </div>
-        <div style="font-size:12px;color:var(--accent3);font-family:'DM Mono',monospace;margin-bottom:12px;">WA: ${waName}</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-          <div>
-            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;margin-bottom:8px;">
-              <input type="checkbox" id="diffZoom_${i}" onchange="toggleDiffInput('zoom',${i})">
-              <span class="toggle"></span>
-              <span style="font-size:12px;color:var(--text2)">Different Zoom Link</span>
-            </label>
-            <div class="diff-input" id="diffZoomInput_${i}">
-              <input type="text" id="zoomLink_${i}" placeholder="https://zoom.us/j/..." style="font-size:12px;" />
-            </div>
-          </div>
-          <div>
-            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;margin-bottom:8px;">
-              <input type="checkbox" id="diffWebinar_${i}" onchange="toggleDiffInput('webinar',${i})">
-              <span class="toggle"></span>
-              <span style="font-size:12px;color:var(--text2)">Different Webinar ID</span>
-            </label>
-            <div class="diff-input" id="diffWebinarInput_${i}">
-              <input type="text" id="webinarId_${i}" placeholder="Webinar ID" style="font-size:12px;" />
-            </div>
-          </div>
-        </div>
-      </div>`;
-  });
-}
-
-function toggleDiffInput(type,idx) {
-  const key = type==='zoom' ? 'Zoom' : 'Webinar';
-  const cb  = document.getElementById(`diff${key}_${idx}`);
-  const div = document.getElementById(`diff${key}Input_${idx}`);
-  if (div) div.classList.toggle('show', cb.checked);
-}
-
-// ─── Logger ───────────────────────────────────────────────────────────────────
-function log(msg, type='info') {
-  const box = document.getElementById('logBox');
+// ═══════════════════════════════════════════════════════════════════════════════
+// LOGGER / PROGRESS
+// ═══════════════════════════════════════════════════════════════════════════════
+function log(msg,type='info'){
+  const box=document.getElementById('logBox');
   box.classList.add('show');
-  const line = document.createElement('div');
-  line.className = 'log-line';
-  const tags = { info:'[INFO]', ok:'[OK]', warn:'[WARN]', err:'[ERR]' };
-  line.innerHTML = `<span class="tag-${type}">${tags[type]||'[INFO]'}</span><span>${msg}</span>`;
-  box.appendChild(line);
-  box.scrollTop = box.scrollHeight;
+  const line=document.createElement('div'); line.className='log-line';
+  const tags={info:'[INFO]',ok:'[OK]',warn:'[WARN]',err:'[ERR]'};
+  line.innerHTML=`<span class="tag-${type}">${tags[type]||'[INFO]'}</span><span>${msg}</span>`;
+  box.appendChild(line); box.scrollTop=box.scrollHeight;
 }
-
-function setProgress(pct) {
+function setProgress(pct){
   document.getElementById('progressWrap').classList.add('show');
-  document.getElementById('progressBar').style.width = pct+'%';
+  document.getElementById('progressBar').style.width=pct+'%';
+}
+function showAlert(msg,type='error'){
+  document.getElementById('alertBox').innerHTML=`<div class="alert ${type}">${msg}</div>`;
 }
 
-function showAlert(msg, type='error') {
-  document.getElementById('alertBox').innerHTML = `<div class="alert ${type}">${msg}</div>`;
+// ═══════════════════════════════════════════════════════════════════════════════
+// RESOLVE VARIABLE VALUE for a single row
+// ═══════════════════════════════════════════════════════════════════════════════
+function resolveVarValue(varDef, row, ctx) {
+  // ctx = { workshopDate, workshopTime, funnel, waName, groupOverrides }
+  // Check group override first (only for fixed-source vars by name)
+  const overrideVal = ctx.groupOverrides?.[varDef.name];
+  if (overrideVal !== undefined) return overrideVal;
+
+  switch(varDef.source) {
+    case '__name__':        return ((row[ctx.nameCol]||'').toString().trim()) || 'User';
+    case '__date__':        return ctx.workshopDate;
+    case '__time__':        return ctx.workshopTime;
+    case '__funnel__':      return ctx.funnel;
+    case '__wa_group__':    return ctx.waName;
+    case '__amount_date__': return (row[ctx.createdCol]||'').toString().trim();
+    case '__age__':         return (row[ctx.ageCol]||'').toString().trim();
+    case '__fixed__':       return varDef.fixedVal || '';
+    default:
+      if(varDef.source.startsWith('col:')) {
+        const colName = varDef.source.slice(4);
+        return (row[colName]||'').toString().trim();
+      }
+      return '';
+  }
 }
 
-// ─── MAIN GENERATE ────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════════
+// MAIN GENERATE
+// ═══════════════════════════════════════════════════════════════════════════════
 async function generate() {
   document.getElementById('logBox').innerHTML='';
   document.getElementById('logBox').classList.remove('show');
@@ -1112,8 +976,7 @@ async function generate() {
   document.getElementById('resultsGrid').innerHTML='';
   document.getElementById('dlAllBtn').classList.remove('show');
   document.getElementById('dlCombinedBtn').classList.remove('show');
-  generatedFiles = {};
-  setProgress(0);
+  generatedFiles={}; setProgress(0);
 
   const funnel           = document.getElementById('funnelSelect').value;
   const workshopDate     = document.getElementById('workshopDate').value.trim();
@@ -1122,19 +985,37 @@ async function generate() {
   const paymentFile      = document.getElementById('paymentFile').files[0];
   const batchFile        = document.getElementById('batchFile').files[0];
 
-  if (!funnel)           { showAlert('Please select a funnel.'); return; }
-  if (!workshopDate)     { showAlert('Please enter workshop date.'); return; }
-  if (!workshopTime)     { showAlert('Please enter workshop time.'); return; }
-  if (!defaultGroupName) { showAlert('Please enter default WhatsApp group name.'); return; }
-  if (!paymentFile)      { showAlert('Please upload the payment report CSV.'); return; }
-  if (!batchFile)        { showAlert('Please upload the batch change sheet CSV.'); return; }
+  if(!funnel)            { showAlert('Please select a funnel.'); return; }
+  if(!workshopDate)      { showAlert('Please enter workshop date.'); return; }
+  if(!workshopTime)      { showAlert('Please enter workshop time.'); return; }
+  if(!defaultGroupName)  { showAlert('Please enter default WhatsApp group name.'); return; }
+  if(!paymentFile)       { showAlert('Please upload the payment report CSV.'); return; }
+  if(!batchFile)         { showAlert('Please upload the batch change sheet CSV.'); return; }
 
-  const btn = document.getElementById('genBtn');
+  // Read variables
+  const vars = getVarItems();
+  if(vars.length === 0) { showAlert('Please add at least one custom variable.'); return; }
+
+  // Validate: all vars must have a name
+  const unnamed = vars.filter(v => !v.name.trim());
+  if(unnamed.length) { showAlert(`${unnamed.length} variable(s) have no name. Please fill in all variable names.`); return; }
+
+  // Duplicate name check
+  const names = vars.map(v => v.name.trim().toLowerCase());
+  const dupes = names.filter((n,i) => names.indexOf(n) !== i);
+  if(dupes.length) { showAlert(`Duplicate variable names: ${[...new Set(dupes)].join(', ')}. Each variable must have a unique name.`); return; }
+
+  // Check constant name clash
+  const constantsLower = FIXED_COLS.map(c=>c.toLowerCase());
+  const clashing = vars.filter(v => constantsLower.includes(v.name.trim().toLowerCase()));
+  if(clashing.length) { showAlert(`Variable name(s) clash with fixed columns: ${clashing.map(v=>v.name).join(', ')}. These are reserved.`); return; }
+
+  const btn=document.getElementById('genBtn');
   btn.disabled=true; btn.textContent='⏳ Processing...';
 
-  const funnelConfig = FUNNEL_CONFIG[funnel];
+  const funnelConfig=FUNNEL_CONFIG[funnel];
   log(`Funnel: ${funnel} (${funnelConfig.label}) | Date: ${workshopDate} | Time: ${workshopTime}`);
-  log(`Slug conditions: ${funnelConfig.slugConditions.map(c=>`${c.type}:${c.value}`).join(' OR ')} | Amount < ${funnelConfig.amountMax}`);
+  log(`Custom variables (${vars.length}): ${vars.map(v=>v.name).join(', ')}`);
   setProgress(10);
 
   let paymentData, batchRawData;
@@ -1142,18 +1023,17 @@ async function generate() {
     paymentData  = await parseCSVWithHeader(paymentFile);
     batchRawData = await parseCSVNoHeader(batchFile);
   } catch(e) {
-    showAlert('Error reading CSV files: ' + e.message);
+    showAlert('Error reading CSV files: '+e.message);
     btn.disabled=false; btn.textContent='⚡ Generate WATI CSVs'; return;
   }
-
   log(`Payment report: ${paymentData.length} total rows`);
-  log(`Batch sheet raw rows: ${batchRawData.length}`);
   setProgress(20);
 
-  const paymentHeaders = Object.keys(paymentData[0]||{});
-  const findCol = (...keywords) => paymentHeaders.find(h => {
-    const lh = h.toLowerCase().replace(/[\s_]/g,'');
-    return keywords.some(kw => lh.includes(kw));
+  // Detect columns
+  const paymentHeaders=Object.keys(paymentData[0]||{});
+  const findCol=(...keywords)=>paymentHeaders.find(h=>{
+    const lh=h.toLowerCase().replace(/[\s_]/g,'');
+    return keywords.some(kw=>lh.includes(kw));
   });
   const slugCol    = findCol('paymentslug','slug');
   const statusCol  = findCol('status');
@@ -1166,268 +1046,236 @@ async function generate() {
 
   log(`Columns → Slug:${slugCol} | Status:${statusCol} | CreatedAt:${createdCol} | Amount:${amountCol} | Phone:${phoneCol}`);
 
-  if (!slugCol) {
-    const looksLikeBatch = paymentHeaders.some(h => h.toLowerCase().includes('from')||h.toLowerCase().includes('done by'));
-    if (looksLikeBatch) {
-      showAlert('❌ It looks like you uploaded the Batch Change Sheet where the Payment Report should be. Please swap the files.');
-    } else {
-      showAlert('Cannot find Payment Slug column. Headers found: ' + paymentHeaders.join(', '));
-    }
+  if(!slugCol){
+    const looksLikeBatch=paymentHeaders.some(h=>h.toLowerCase().includes('from')||h.toLowerCase().includes('done by'));
+    showAlert(looksLikeBatch
+      ? '❌ Looks like you uploaded the Batch Change Sheet where the Payment Report should be. Please swap the files.'
+      : 'Cannot find Payment Slug column. Headers found: '+paymentHeaders.join(', '));
     btn.disabled=false; btn.textContent='⚡ Generate WATI CSVs'; return;
   }
-  if (!statusCol)  { showAlert('Cannot find Status column.');    btn.disabled=false; btn.textContent='⚡ Generate WATI CSVs'; return; }
-  if (!createdCol) { showAlert('Cannot find CreatedAt column.'); btn.disabled=false; btn.textContent='⚡ Generate WATI CSVs'; return; }
-  if (!amountCol)  { log('Amount column not found — amount filter will be skipped', 'warn'); }
+  if(!statusCol)  { showAlert('Cannot find Status column.');    btn.disabled=false; btn.textContent='⚡ Generate WATI CSVs'; return; }
+  if(!createdCol) { showAlert('Cannot find CreatedAt column.'); btn.disabled=false; btn.textContent='⚡ Generate WATI CSVs'; return; }
+  if(!amountCol)  log('Amount column not found — amount filter will be skipped','warn');
   setProgress(30);
 
-  // ── Filter: slug match + amount threshold ──
-  let filtered = paymentData.filter(row => {
-    const slug   = (row[slugCol]   || '').toString();
-    const amount = amountCol ? (row[amountCol] || '').toString() : '0';
-    return rowMatchesFunnel(slug, amount, funnel);
+  // Filter by slug + amount
+  let filtered=paymentData.filter(row=>{
+    const slug  =(row[slugCol]||'').toString();
+    const amount=amountCol?(row[amountCol]||'').toString():'0';
+    return rowMatchesFunnel(slug,amount,funnel);
   });
-  log(`After slug+amount filter: ${filtered.length} rows`, filtered.length>0?'ok':'warn');
-
-  // ── Log dropped rows (slug matched but amount too high) ──
-  if (isFinite(funnelConfig.amountMax)) {
-    const slugOnly = paymentData.filter(row => {
-      const slug = (row[slugCol]||'').toString().toLowerCase().trim();
-      return funnelConfig.slugConditions.some(c =>
-        c.type==='exact' ? slug===c.value : slug.includes(c.value)
-      );
+  log(`After slug+amount filter: ${filtered.length} rows`,filtered.length>0?'ok':'warn');
+  if(isFinite(funnelConfig.amountMax)){
+    const slugOnly=paymentData.filter(row=>{
+      const slug=(row[slugCol]||'').toString().toLowerCase().trim();
+      return funnelConfig.slugConditions.some(c=>c.type==='exact'?slug===c.value:slug.includes(c.value));
     });
-    const droppedAmt = slugOnly.length - filtered.length;
-    if (droppedAmt > 0) log(`Dropped ${droppedAmt} rows: slug matched but amount ≥ ${funnelConfig.amountMax}`, 'warn');
+    const droppedAmt=slugOnly.length-filtered.length;
+    if(droppedAmt>0) log(`Dropped ${droppedAmt} rows: slug matched but amount ≥ ${funnelConfig.amountMax}`,'warn');
   }
 
-  // ── Filter: status = captured ──
-  const failedRows = filtered.filter(row =>
-    (row[statusCol]||'').toString().toLowerCase().trim() !== 'captured'
-  );
-  log(`Status != captured (dropped): ${failedRows.length} rows`, failedRows.length>0?'warn':'ok');
-  filtered = filtered.filter(row =>
-    (row[statusCol]||'').toString().toLowerCase().trim() === 'captured'
-  );
-  log(`After status=captured filter: ${filtered.length} rows`, filtered.length>0?'ok':'warn');
+  // Filter status=captured
+  const failedRows=filtered.filter(row=>(row[statusCol]||'').toString().toLowerCase().trim()!=='captured');
+  log(`Status != captured (dropped): ${failedRows.length} rows`,failedRows.length>0?'warn':'ok');
+  filtered=filtered.filter(row=>(row[statusCol]||'').toString().toLowerCase().trim()==='captured');
+  log(`After status=captured filter: ${filtered.length} rows`,filtered.length>0?'ok':'warn');
   setProgress(45);
 
-  // ── Parse batch sheet ──
-  const allBatchGroups = parseBatchRaw(batchRawData);
-  log(`All batch groups parsed: ${allBatchGroups.map(g=>g.label).join(' | ')}`);
-
-  let relevantGroups = filterGroupsByDate(allBatchGroups, workshopDate);
-  if (relevantGroups.length===0) {
-    log(`No groups matched "${workshopDate}" — trying all groups`, 'warn');
-    relevantGroups = allBatchGroups.filter(g=>g.from&&g.to);
+  // Parse batch
+  const allBatchGroups=parseBatchRaw(batchRawData);
+  log(`All batch groups: ${allBatchGroups.map(g=>g.label).join(' | ')}`);
+  let relevantGroups=filterGroupsByDate(allBatchGroups,workshopDate);
+  if(relevantGroups.length===0){
+    log(`No groups matched "${workshopDate}" — using all groups`,'warn');
+    relevantGroups=allBatchGroups.filter(g=>g.from&&g.to);
   } else {
-    log(`Groups for "${workshopDate}": ${relevantGroups.map(g=>g.label).join(', ')}`, 'ok');
+    log(`Groups for "${workshopDate}": ${relevantGroups.map(g=>g.label).join(', ')}`,'ok');
   }
-
-  const maxPossibleDate = new Date(8640000000000000);
-  relevantGroups = relevantGroups.filter(g=>g.from);
-  relevantGroups = relevantGroups.map(g => {
-    if (!g.to) {
-      log(`Group ${g.groupId} has no closing date — using max date (open batch)`, 'warn');
-      return { ...g, to: maxPossibleDate, toRaw: 'open (no closing date)' };
-    }
+  const maxPossibleDate=new Date(8640000000000000);
+  relevantGroups=relevantGroups.filter(g=>g.from).map(g=>{
+    if(!g.to){ log(`Group ${g.groupId} has no closing date — open batch`,'warn'); return{...g,to:maxPossibleDate,toRaw:'open'}; }
     return g;
   });
-
-  if (relevantGroups.length===0) {
-    showAlert('Could not find matching groups with valid date ranges in batch sheet. Check your workshop date format (e.g. "8th March").');
+  if(relevantGroups.length===0){
+    showAlert('Could not find matching groups. Check workshop date format (e.g. "8th March").');
     btn.disabled=false; btn.textContent='⚡ Generate WATI CSVs'; return;
   }
   setProgress(55);
 
-  relevantGroups.forEach(g => {
-    log(`Group ${g.groupId}: from=${g.from?g.from.toLocaleString():'NULL'} | to=${g.to?g.to.toLocaleString():'NULL'}`);
-  });
+  relevantGroups.forEach(g=>log(`Group ${g.groupId}: ${g.from.toLocaleString()} → ${g.to.toLocaleString()}`));
+  const minDate=new Date(Math.min(...relevantGroups.map(g=>g.from.getTime())));
+  const maxDate=new Date(Math.max(...relevantGroups.map(g=>g.to.getTime())));
 
-  const minDate = new Date(Math.min(...relevantGroups.map(g=>g.from.getTime())));
-  const maxDate = new Date(Math.max(...relevantGroups.map(g=>g.to.getTime())));
-  log(`Overall date range: ${minDate.toLocaleString()} → ${maxDate.toLocaleString()}`);
-
-  const sampleDates = filtered.slice(0,5).map(r => {
-    const raw = (r[createdCol]||'').toString();
-    const parsed = parseDatetime(raw);
-    return `"${raw}" → ${parsed?parsed.toLocaleString():'NULL'}`;
+  const beforeCount=filtered.length;
+  filtered=filtered.filter(row=>{
+    const dt=parseDatetime((row[createdCol]||'').toString());
+    return dt && dt>=minDate && dt<maxDate;
   });
-  log(`Sample CreatedAt parsing: ${sampleDates.join(' | ')}`, 'info');
-
-  const beforeCount = filtered.length;
-  filtered = filtered.filter(row => {
-    const dt = parseDatetime((row[createdCol]||'').toString());
-    if (!dt) return false;
-    return dt >= minDate && dt < maxDate;
-  });
-  log(`After date range filter: ${beforeCount} → ${filtered.length} rows`, filtered.length>0?'ok':'warn');
+  log(`After date range filter: ${beforeCount} → ${filtered.length} rows`,filtered.length>0?'ok':'warn');
   setProgress(65);
 
-  // ── Assign rows to groups ──
-  const grouped = {};
-  relevantGroups.forEach(g => { grouped[g.groupId]=[]; });
-  let unassigned=0, nullDate=0, outsideRange=0;
-
-  filtered.forEach(row => {
-    const dt = parseDatetime((row[createdCol]||'').toString());
-    if (!dt) { nullDate++; unassigned++; return; }
-    let assigned = false;
-    for (const g of relevantGroups) {
-      if (dt>=g.from && dt<g.to) { grouped[g.groupId].push(row); assigned=true; break; }
-    }
-    if (!assigned) { outsideRange++; unassigned++; }
+  // Assign rows to groups
+  const grouped={};
+  relevantGroups.forEach(g=>{grouped[g.groupId]=[];});
+  let unassigned=0;
+  filtered.forEach(row=>{
+    const dt=parseDatetime((row[createdCol]||'').toString());
+    if(!dt){unassigned++;return;}
+    let assigned=false;
+    for(const g of relevantGroups){if(dt>=g.from&&dt<g.to){grouped[g.groupId].push(row);assigned=true;break;}}
+    if(!assigned) unassigned++;
   });
-
-  if (nullDate>0)     log(`${nullDate} rows dropped — CreatedAt could not be parsed`, 'warn');
-  if (outsideRange>0) log(`${outsideRange} rows dropped — outside all group windows`, 'warn');
-  if (unassigned>0)   log(`Total dropped: ${unassigned} rows`, 'warn');
-  else                log('All rows assigned successfully', 'ok');
-  relevantGroups.forEach(g => log(`${g.groupId} (${g.label}): ${grouped[g.groupId].length} records`, 'ok'));
+  if(unassigned>0) log(`Total dropped: ${unassigned} rows`,'warn');
+  else             log('All rows assigned successfully','ok');
+  relevantGroups.forEach(g=>log(`${g.groupId}: ${grouped[g.groupId].length} records`,'ok'));
   setProgress(78);
 
-  // ── Build WATI CSVs ──
-  const defaultZoom    = document.getElementById('defaultZoomLink').value.trim();
-  const defaultWebinar = document.getElementById('defaultWebinarId').value.trim();
-  const resultsGrid    = document.getElementById('resultsGrid');
+  // Read group overrides
+  const groupOverrides=getGroupOverrides();
+
+  // Build WATI CSVs
+  const resultsGrid=document.getElementById('resultsGrid');
   document.getElementById('resultsSection').style.display='block';
 
-  relevantGroups.forEach((g,i) => {
+  const ctx = { workshopDate, workshopTime, funnel, nameCol, createdCol, ageCol };
+
+  relevantGroups.forEach((g,i)=>{
     const rows   = grouped[g.groupId]||[];
-    const waName = defaultGroupName.replace(/GX/gi, g.groupId);
+    const waName = defaultGroupName.replace(/GX/gi,g.groupId);
+    const go     = groupOverrides[g.groupId] || {};
 
-    const diffZoomCb    = document.getElementById(`diffZoom_${i}`);
-    const diffWebinarCb = document.getElementById(`diffWebinar_${i}`);
-    const zoomLink  = (diffZoomCb&&diffZoomCb.checked)    ? (document.getElementById(`zoomLink_${i}`)?.value?.trim()   ||defaultZoom)    : defaultZoom;
-    const webinarId = (diffWebinarCb&&diffWebinarCb.checked) ? (document.getElementById(`webinarId_${i}`)?.value?.trim() ||defaultWebinar) : defaultWebinar;
+    const watiRows=rows.map(row=>{
+      const phoneRaw=(row[phoneCol]||'').toString();
+      const {countryCode,phone}=parsePhone(phoneRaw);
 
-    const watiRows = rows.map(row => {
-      const phoneRaw = (row[phoneCol]||'').toString();
-      const { countryCode, phone } = parsePhone(phoneRaw);
-      return {
-        Name:           ((row[nameCol]||'').toString().trim())||'User',
+      // Fixed constants
+      const outRow = {
         CountryCode:    countryCode,
         Phone:          phone,
         AllowBroadcast: 'TRUE',
         AllowSMS:       'TRUE',
-        email:          (row[emailCol]  ||'').toString().trim(),
-        amount:         (row[amountCol] ||'').toString().trim(),
-        'Amount Date':  (row[createdCol]||'').toString().trim(),
-        Age:            (row[ageCol]    ||'').toString().trim(),
-        date:           workshopDate,
-        time:           workshopTime,
-        batch:          funnel,
-        whatsapp_link:  waName,
-        zoom_link:      zoomLink,
-        webinar_id:     webinarId
+        email:          (row[emailCol]||'').toString().trim(),
+        amount:         (row[amountCol]||'').toString().trim(),
       };
+
+      // Custom variables (in user-defined order)
+      vars.forEach(v => {
+        const colName = v.name.trim();
+        outRow[colName] = resolveVarValue(v, row, { ...ctx, waName, groupOverrides: go });
+      });
+
+      return outRow;
     });
 
-    const csv      = Papa.unparse(watiRows);
+    // Column order: fixed constants first, then custom vars
+    const fields = [...FIXED_COLS, ...vars.map(v=>v.name.trim())];
+    const csv    = Papa.unparse(watiRows, { columns: fields });
     const filename = `${waName}.csv`;
-    generatedFiles[filename] = csv;
+    generatedFiles[filename]=csv;
 
-    const card = document.createElement('div');
-    card.className = 'result-card';
-    card.innerHTML = `
+    const card=document.createElement('div');
+    card.className='result-card';
+    card.innerHTML=`
       <div class="result-group-name">${g.groupId}</div>
       <div class="result-count">${rows.length}</div>
       <div class="result-label">contacts</div>
-      <div style="font-size:10px;color:var(--text2);font-family:'DM Mono',monospace;margin-top:2px;">${waName}</div>
-      <a class="dl-btn" onclick="downloadFile('${filename}')">⬇ Download CSV</a>
+      <div style="font-size:10px;color:var(--text2);font-family:'DM Mono',monospace;margin-top:2px;">${escHtml(waName)}</div>
+      <a class="dl-btn" onclick="downloadFile('${escHtml(filename)}')">⬇ Download CSV</a>
     `;
     resultsGrid.appendChild(card);
   });
 
   setProgress(100);
-  log(`✅ Done! Generated ${relevantGroups.length} WATI CSV files.`, 'ok');
+  log(`✅ Done! Generated ${relevantGroups.length} WATI CSV files.`,'ok');
   document.getElementById('dlAllBtn').classList.add('show');
   document.getElementById('dlCombinedBtn').classList.add('show');
   btn.disabled=false; btn.textContent='⚡ Generate WATI CSVs';
-  showAlert(`✅ Successfully generated ${relevantGroups.length} WATI CSV files!`, 'success');
+  showAlert(`✅ Successfully generated ${relevantGroups.length} WATI CSV files!`,'success');
 }
 
-// ─── CSV helpers ──────────────────────────────────────────────────────────────
-function parseCSVWithHeader(file) {
-  return new Promise((resolve,reject) => {
-    Papa.parse(file, { header:true, skipEmptyLines:true, complete:r=>resolve(r.data), error:e=>reject(e) });
-  });
+// ═══════════════════════════════════════════════════════════════════════════════
+// CSV HELPERS
+// ═══════════════════════════════════════════════════════════════════════════════
+function parseCSVWithHeader(file){
+  return new Promise((res,rej)=>Papa.parse(file,{header:true,skipEmptyLines:true,complete:r=>res(r.data),error:e=>rej(e)}));
 }
-function parseCSVNoHeader(file) {
-  return new Promise((resolve,reject) => {
-    Papa.parse(file, { header:false, skipEmptyLines:true, complete:r=>resolve(r.data), error:e=>reject(e) });
-  });
+function parseCSVNoHeader(file){
+  return new Promise((res,rej)=>Papa.parse(file,{header:false,skipEmptyLines:true,complete:r=>res(r.data),error:e=>rej(e)}));
 }
 
-// ─── Download helpers ─────────────────────────────────────────────────────────
-function downloadFile(filename) {
-  const csv = generatedFiles[filename];
-  if (!csv) return;
-  const blob = new Blob(['\uFEFF'+csv], { type:'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href=url; a.download=filename; a.click();
+// ═══════════════════════════════════════════════════════════════════════════════
+// DOWNLOAD HELPERS
+// ═══════════════════════════════════════════════════════════════════════════════
+function downloadFile(filename){
+  const csv=generatedFiles[filename]; if(!csv) return;
+  const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url; a.download=filename; a.click();
   URL.revokeObjectURL(url);
 }
-
-async function downloadAll() {
-  const zip = new JSZip();
-  Object.entries(generatedFiles).forEach(([name,csv]) => zip.file(name,'\uFEFF'+csv));
-  const blob = await zip.generateAsync({ type:'blob' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href=url; a.download='wati_files.zip'; a.click();
+async function downloadAll(){
+  const zip=new JSZip();
+  Object.entries(generatedFiles).forEach(([name,csv])=>zip.file(name,'\uFEFF'+csv));
+  const blob=await zip.generateAsync({type:'blob'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url; a.download='wati_files.zip'; a.click();
   URL.revokeObjectURL(url);
 }
-
-function downloadCombined() {
-  const files = Object.values(generatedFiles);
-  if (!files.length) return;
-  let combinedRows=[], headers=null;
-  files.forEach((csv,idx) => {
-    const parsed = Papa.parse(csv,{header:true,skipEmptyLines:true});
-    if (idx===0) headers=parsed.meta.fields;
-    combinedRows = combinedRows.concat(parsed.data);
+function downloadCombined(){
+  const files=Object.values(generatedFiles); if(!files.length) return;
+  let combinedRows=[],headers=null;
+  files.forEach((csv,idx)=>{
+    const parsed=Papa.parse(csv,{header:true,skipEmptyLines:true});
+    if(idx===0) headers=parsed.meta.fields;
+    combinedRows=combinedRows.concat(parsed.data);
   });
-  const combinedCsv = Papa.unparse(combinedRows,{fields:headers});
-  const blob = new Blob(['\uFEFF'+combinedCsv],{type:'text/csv;charset=utf-8;'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href=url; a.download='wati_combined_all_groups.csv'; a.click();
+  const combinedCsv=Papa.unparse(combinedRows,{fields:headers});
+  const blob=new Blob(['\uFEFF'+combinedCsv],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url; a.download='wati_combined_all_groups.csv'; a.click();
   URL.revokeObjectURL(url);
 }
-
-function downloadSampleBatch() {
-  const csv = `Batch Name,from (inclusive),to (exclusive)
+function downloadSampleBatch(){
+  const csv=`Batch Name,from (inclusive),to (exclusive)
 1st March G2,22/02/2026 00:00:00,28/02/2026 22:45:00
 1st March G3,28/02/2026 22:45:00,01/03/2026 00:00:00
 8th March G2,01/03/2026 00:00:00,07/03/2026 18:00:00
 8th March G3,07/03/2026 18:00:00,08/03/2026 00:00:00
 15th March G2,08/03/2026 00:00:00,14/03/2026 18:00:00
 15th March G3,14/03/2026 18:00:00,15/03/2026 00:00:00`;
-  const blob = new Blob([csv],{type:'text/csv'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href=url; a.download='batch_change_sheet_sample.csv'; a.click();
+  const blob=new Blob([csv],{type:'text/csv'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url; a.download='batch_change_sheet_sample.csv'; a.click();
   URL.revokeObjectURL(url);
 }
 
-// ─── Drag & drop ──────────────────────────────────────────────────────────────
-['paymentDrop','batchDrop'].forEach(id => {
-  const el = document.getElementById(id);
-  el.addEventListener('dragover', e=>{ e.preventDefault(); el.classList.add('dragover'); });
-  el.addEventListener('dragleave', ()=>el.classList.remove('dragover'));
-  el.addEventListener('drop', e=>{
-    e.preventDefault(); el.classList.remove('dragover');
-    const type = id==='paymentDrop' ? 'payment' : 'batch';
-    const input = document.getElementById(type==='payment'?'paymentFile':'batchFile');
-    input.files = e.dataTransfer.files;
-    onFileSelect(type);
+// ═══════════════════════════════════════════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════════════════════════════════════════
+function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// DRAG & DROP
+// ═══════════════════════════════════════════════════════════════════════════════
+['paymentDrop','batchDrop'].forEach(id=>{
+  const el=document.getElementById(id);
+  el.addEventListener('dragover',e=>{e.preventDefault();el.classList.add('dragover');});
+  el.addEventListener('dragleave',()=>el.classList.remove('dragover'));
+  el.addEventListener('drop',e=>{
+    e.preventDefault();el.classList.remove('dragover');
+    const type=id==='paymentDrop'?'payment':'batch';
+    const input=document.getElementById(type==='payment'?'paymentFile':'batchFile');
+    input.files=e.dataTransfer.files; onFileSelect(type);
   });
 });
 
-document.getElementById('workshopDate').addEventListener('input', ()=>{
-  if (document.getElementById('batchFile').files[0]) parseBatchForGroups();
+document.getElementById('workshopDate').addEventListener('input',()=>{
+  if(document.getElementById('batchFile').files[0]) parseBatchForGroups();
 });
+
+// ── Boot ──
+initDefaultVars();
+
 </script>
 </body>
 </html>
