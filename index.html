@@ -424,8 +424,9 @@
 
     <!-- Constants info -->
     <div style="margin-bottom:18px;">
-      <div class="const-label" style="margin-bottom:8px;">These columns are always fixed (same name every time):</div>
+      <div class="const-label" style="margin-bottom:8px;">These columns are always fixed (same name, same order, every time):</div>
       <div class="constants-row">
+        <span class="const-pill">Name</span>
         <span class="const-pill">CountryCode</span>
         <span class="const-pill">Phone</span>
         <span class="const-pill">AllowBroadcast</span>
@@ -513,9 +514,10 @@ const FUNNEL_CONFIG = {
 };
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// CONSTANTS — these columns are ALWAYS in the output with fixed names
+// CONSTANTS — these columns are ALWAYS in the output with fixed names & order
+// Final CSV column order: Name → CountryCode → Phone → AllowBroadcast → AllowSMS → email → amount → (custom vars)
 // ═══════════════════════════════════════════════════════════════════════════════
-const FIXED_COLS = ['CountryCode','Phone','AllowBroadcast','AllowSMS','email','amount'];
+const FIXED_COLS = ['Name','CountryCode','Phone','AllowBroadcast','AllowSMS','email','amount'];
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // VARIABLE SYSTEM
@@ -554,9 +556,8 @@ let detectedGroups      = [];
 let generatedFiles      = {};
 let varIdCounter        = 0;
 
-// Default variable template (matches old hardcoded output)
+// Default variable template — Name is now fixed, so starts from Amount_Date
 const DEFAULT_VARS = [
-  { name: 'name',          source: '__name__',        fixedVal: '' },
   { name: 'Amount_Date',   source: '__amount_date__',  fixedVal: '' },
   { name: 'Age',           source: '__age__',          fixedVal: '' },
   { name: 'date',          source: '__date__',         fixedVal: '' },
@@ -1148,8 +1149,10 @@ async function generate() {
       const phoneRaw=(row[phoneCol]||'').toString();
       const {countryCode,phone}=parsePhone(phoneRaw);
 
-      // Fixed constants
+      // Fixed constants — always first, always same column names
+      // Order: Name → CountryCode → Phone → AllowBroadcast → AllowSMS → email → amount
       const outRow = {
+        Name:           (nameCol ? (row[nameCol]||'').toString().trim() : '') || 'User',
         CountryCode:    countryCode,
         Phone:          phone,
         AllowBroadcast: 'TRUE',
