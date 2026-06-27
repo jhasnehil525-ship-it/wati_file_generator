@@ -36,7 +36,6 @@
     overflow-x: hidden;
   }
 
-  /* Background grid */
   body::before {
     content: '';
     position: fixed;
@@ -67,7 +66,6 @@
     z-index: 1;
   }
 
-  /* Header */
   header {
     text-align: center;
     margin-bottom: 48px;
@@ -110,7 +108,6 @@
     letter-spacing: 0.3px;
   }
 
-  /* Steps */
   .steps-nav {
     display: flex;
     gap: 0;
@@ -141,12 +138,9 @@
     color: var(--accent);
     border: 1px solid rgba(124,106,255,0.3);
   }
-  .step-pill.done {
-    color: var(--accent3);
-  }
+  .step-pill.done { color: var(--accent3); }
   .step-pill.done::before { content: '✓ '; }
 
-  /* Cards */
   .card {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -193,7 +187,6 @@
     margin-top: 2px;
   }
 
-  /* Form elements */
   .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -237,7 +230,6 @@
   input::placeholder { color: var(--text2); opacity: 0.5; }
   select option { background: var(--surface2); }
 
-  /* File upload */
   .file-drop {
     border: 2px dashed var(--border);
     border-radius: var(--radius);
@@ -273,7 +265,6 @@
     color: var(--accent3);
   }
 
-  /* Zoom/Webinar group config */
   .groups-container {
     display: flex;
     flex-direction: column;
@@ -341,7 +332,6 @@
   .diff-input { display: none; margin-top: 10px; }
   .diff-input.show { display: block; }
 
-  /* Generate button */
   .generate-btn {
     width: 100%;
     padding: 16px;
@@ -375,7 +365,6 @@
   }
   .generate-btn:hover::before { opacity: 1; }
 
-  /* Progress */
   .progress-bar-wrap {
     background: var(--surface2);
     border-radius: 100px;
@@ -393,7 +382,6 @@
     transition: width 0.4s ease;
   }
 
-  /* Status / Logs */
   .log-box {
     background: var(--surface2);
     border: 1px solid var(--border);
@@ -415,7 +403,6 @@
   .log-line .tag-warn { color: var(--warning); }
   .log-line .tag-err { color: var(--error); }
 
-  /* Results */
   .results-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -495,7 +482,6 @@
     box-shadow: 0 8px 24px rgba(106,255,205,0.15);
   }
 
-  /* Wati sample download */
   .sample-link {
     display: inline-flex;
     align-items: center;
@@ -514,7 +500,6 @@
   }
   .sample-link:hover { background: rgba(124,106,255,0.15); }
 
-  /* Animations */
   @keyframes fadeDown {
     from { opacity: 0; transform: translateY(-20px); }
     to { opacity: 1; transform: translateY(0); }
@@ -535,11 +520,7 @@
     font-family: 'DM Mono', monospace;
   }
 
-  .separator {
-    height: 1px;
-    background: var(--border);
-    margin: 24px 0;
-  }
+  .separator { height: 1px; background: var(--border); margin: 24px 0; }
 
   .tag-badge {
     display: inline-block;
@@ -584,7 +565,6 @@
   .alert.error { background: rgba(248,113,113,0.1); border: 1px solid rgba(248,113,113,0.3); color: var(--error); display: block; }
   .alert.success { background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.3); color: var(--success); display: block; }
 
-  /* scrollbar */
   ::-webkit-scrollbar { width: 6px; height: 6px; }
   ::-webkit-scrollbar-track { background: var(--surface); }
   ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
@@ -598,14 +578,13 @@
 
 <div class="container">
 
-  <!-- Header -->
   <header>
     <div class="logo-badge">WATI Report Generator</div>
     <h1>Payment → WATI CSV</h1>
     <p class="subtitle">Automate your batch group assignment & WATI file generation</p>
   </header>
 
-  <!-- Step 1: Funnel & Workshop Info -->
+  <!-- Step 1 -->
   <div class="card" style="animation-delay:0.1s">
     <div class="card-header">
       <div class="step-num">1</div>
@@ -620,13 +599,15 @@
         <label>Funnel / Course <span class="req">*</span></label>
         <select id="funnelSelect" onchange="onFunnelChange()">
           <option value="">— Select a funnel —</option>
-          <option value="Python">Python</option>
+          <option value="Excel">Excel</option>
+          <option value="SMAI">SMAI (Stock Market)</option>
+          <option value="Python">Python Using AI</option>
+          <option value="10xTechies">10x Techies</option>
+          <option value="DrFinance">Dr. Finance</option>
+          <option value="AITV">AITV</option>
+          <option value="AI">AI Tools</option>
           <option value="SQL">SQL</option>
           <option value="DRF">DRF</option>
-          <option value="AI">AI</option>
-          <option value="AITV">AITV</option>
-          <option value="Excel">Excel</option>
-          <option value="SMAI">SMAI</option>
           <option value="CAW">CAW</option>
           <option value="PBI">PBI</option>
         </select>
@@ -651,7 +632,7 @@
     </div>
   </div>
 
-  <!-- Step 2: Files -->
+  <!-- Step 2 -->
   <div class="card" style="animation-delay:0.2s">
     <div class="card-header">
       <div class="step-num">2</div>
@@ -684,7 +665,7 @@
     </div>
   </div>
 
-  <!-- Step 3: Groups Config (auto-populated) -->
+  <!-- Step 3 -->
   <div class="card" id="groupsSection" style="animation-delay:0.3s">
     <div class="card-header">
       <div class="step-num">3</div>
@@ -709,7 +690,7 @@
     <div class="groups-container" id="groupsContainer"></div>
   </div>
 
-  <!-- Generate -->
+  <!-- Step 4 -->
   <div class="card" style="animation-delay:0.4s">
     <div class="card-header">
       <div class="step-num">4</div>
@@ -753,28 +734,126 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script>
 
-// ─── Slug Maps ───────────────────────────────────────────────────────────────
-// ─── Slug matching conditions per funnel ────────────────────────────────────
-// Each entry is an array of conditions (OR logic between conditions)
-// { type: 'contains', value: '...' }  → slug.includes(value)
-// { type: 'exact',    value: '...' }  → slug === value
-const SLUG_CONDITIONS = {
-  AI:     [ { type: 'contains', value: 'ai-tools-workshop' } ],
-  Python: [ { type: 'contains', value: 'at01' }, { type: 'contains', value: 'python-using-ai' } ],
-  SQL:    [ { type: 'contains', value: 'sqlai' } ],
-  DRF:    [ { type: 'contains', value: 'personal-finance' } ],
-  PBI:    [ { type: 'contains', value: 'powerbi-mastery' } ],
-  Excel:  [ { type: 'contains', value: 'excel-workshop' }, { type: 'contains', value: 'excel-using-ai' } ],
-  AITV:   [ { type: 'exact', value: 'aitv-app' }, { type: 'exact', value: 'aitvapp' } ],
-  CAW:    [ { type: 'contains', value: '5-day-cricket-analytics-workshop' } ],
-  SMAI:   []
+// ─── FUNNEL CONFIG ────────────────────────────────────────────────────────────
+// Each funnel has:
+//   slugConditions : array of { type: 'contains'|'exact', value: string }
+//   amountMax      : number — row qualifies only if amount < this value
+//                    Use Infinity to skip the amount check entirely
+//
+// Logic applied per row:
+//   1. slug matches ANY slugCondition  (contains = substring, exact = full match)
+//   AND
+//   2. amount < amountMax
+
+const FUNNEL_CONFIG = {
+  Excel: {
+    label: 'Excel Workshop',
+    amountMax: 1000,
+    slugConditions: [
+      { type: 'contains', value: 'excel-workshop' },
+      { type: 'contains', value: 'excel-using-ai' }
+    ]
+  },
+  SMAI: {
+    label: 'SMAI (Stock Market)',
+    amountMax: 1000,
+    slugConditions: [
+      { type: 'contains', value: 'stock-market-ga' },
+      { type: 'contains', value: 'stock-market-trading-workshop' },
+      { type: 'contains', value: 'stock-market-pu' }
+    ]
+  },
+  Python: {
+    label: 'Python Using AI Workshop',
+    amountMax: 1000,
+    slugConditions: [
+      { type: 'contains', value: 'at01' },
+      { type: 'contains', value: 'python-using-ai' }
+    ]
+  },
+  '10xTechies': {
+    label: '10x Techies Workshop',
+    amountMax: 1000,
+    slugConditions: [
+      { type: 'contains', value: '10x-techies' }
+    ]
+  },
+  DrFinance: {
+    label: 'Dr. Finance Workshop',
+    amountMax: 1000,
+    slugConditions: [
+      { type: 'contains', value: 'personal-finance' }
+    ]
+  },
+  AITV: {
+    label: 'AITV Workshop',
+    amountMax: 1000,
+    slugConditions: [
+      { type: 'exact', value: 'aitv-app' },
+      { type: 'exact', value: 'aitvapp' }
+    ]
+  },
+  AI: {
+    label: 'AI Tools Workshop',
+    amountMax: 1000,
+    slugConditions: [
+      { type: 'contains', value: 'ai-tools-workshop' }
+    ]
+  },
+  SQL: {
+    label: 'SQL Workshop',
+    amountMax: Infinity,
+    slugConditions: [
+      { type: 'contains', value: 'sqlai' }
+    ]
+  },
+  DRF: {
+    label: 'DRF Workshop',
+    amountMax: Infinity,
+    slugConditions: [
+      { type: 'contains', value: 'personal-finance' }
+    ]
+  },
+  CAW: {
+    label: 'Cricket Analytics Workshop',
+    amountMax: Infinity,
+    slugConditions: [
+      { type: 'contains', value: '5-day-cricket-analytics-workshop' }
+    ]
+  },
+  PBI: {
+    label: 'Power BI Workshop',
+    amountMax: Infinity,
+    slugConditions: [
+      { type: 'contains', value: 'powerbi-mastery' }
+    ]
+  }
 };
 
-function slugMatchesFunnel(slug, funnel) {
-  const conditions = SLUG_CONDITIONS[funnel] || [];
-  if (conditions.length === 0) return false;
+// ─── Row matching: slug AND amount ──────────────────────────────────────────
+// Returns true if the row's slug matches the funnel's conditions
+// AND its amount is below the funnel's amountMax threshold.
+function rowMatchesFunnel(slug, amount, funnel) {
+  const config = FUNNEL_CONFIG[funnel];
+  if (!config) return false;
+
+  // 1. Check slug
   const s = slug.toLowerCase().trim();
-  return conditions.some(c => c.type === 'exact' ? s === c.value : s.includes(c.value));
+  const slugOk = config.slugConditions.some(c =>
+    c.type === 'exact' ? s === c.value : s.includes(c.value)
+  );
+  if (!slugOk) return false;
+
+  // 2. Check amount (only if amountMax is finite)
+  if (isFinite(config.amountMax)) {
+    // Parse amount: strip currency symbols, commas, spaces
+    const amtNum = parseFloat(
+      amount.toString().replace(/[₹$,\s]/g, '').trim()
+    );
+    if (isNaN(amtNum) || amtNum >= config.amountMax) return false;
+  }
+
+  return true;
 }
 
 // ─── State ────────────────────────────────────────────────────────────────────
@@ -784,16 +863,19 @@ let generatedFiles = {};
 // ─── UI Helpers ───────────────────────────────────────────────────────────────
 function onFunnelChange() {
   const f = document.getElementById('funnelSelect').value;
-  const conditions = SLUG_CONDITIONS[f] || [];
+  const config = FUNNEL_CONFIG[f];
   const hint = document.getElementById('slugHint');
-  if (conditions.length) {
-    const desc = conditions.map(c =>
-      `<span class="tag-badge">${c.type === 'exact' ? '=' : '~'} ${c.value}</span>`
-    ).join(' <span style="color:var(--text2);font-size:10px">OR</span> ');
-    hint.innerHTML = desc;
-  } else {
-    hint.innerHTML = '<span style="color:var(--warning)">No conditions configured yet</span>';
-  }
+  if (!config) { hint.innerHTML = ''; return; }
+
+  const slugDesc = config.slugConditions.map(c =>
+    `<span class="tag-badge">${c.type === 'exact' ? '=' : '~'} ${c.value}</span>`
+  ).join(' <span style="color:var(--text2);font-size:10px">OR</span> ');
+
+  const amtDesc = isFinite(config.amountMax)
+    ? `<span style="color:var(--warning);font-size:10px;margin-left:6px;">amount &lt; ${config.amountMax}</span>`
+    : '';
+
+  hint.innerHTML = slugDesc + amtDesc;
 }
 
 function onFileSelect(type) {
@@ -809,175 +891,154 @@ function onGroupNameChange() {
   if (detectedGroups.length) renderGroupsUI();
 }
 
-// ─── Normalize label text for matching ───────────────────────────────────────
-// Expands month abbreviations before stripping, so "Mar" matches "March"
+// ─── normalizeLabel ──────────────────────────────────────────────────────────
+// Converts any date-like string to a canonical lowercase alphanumeric form
+// so that "Mar", "March", "mar.", "MARCH" all collapse to the same token.
+//
+// Steps:
+//  1. Lowercase everything
+//  2. Expand ALL month abbreviations (3-letter) → full month name
+//     e.g. "mar" → "march", "feb" → "february"
+//  3. Strip ordinal suffixes: "8th" → "8", "1st" → "1"
+//  4. Strip all non-alphanumeric characters
+//
+// Result: "8th March" → "8march"
+//         "Mar 8"     → "march8"   ← same tokens, different order, but both
+//         "8 Mar"     → "8march"      will match if one contains the other
 function normalizeLabel(str) {
   const monthMap = {
-    jan: 'january', feb: 'february', mar: 'march', apr: 'april',
-    may: 'may', jun: 'june', jul: 'july', aug: 'august',
+    jan: 'january', feb: 'february', mar: 'march',  apr: 'april',
+    may: 'may',     jun: 'june',     jul: 'july',   aug: 'august',
     sep: 'september', oct: 'october', nov: 'november', dec: 'december'
   };
   let s = str.toLowerCase();
-  // Expand 3-letter month abbreviations to full month names
+
+  // Expand 3-letter month abbreviations to full month names.
+  // Word-boundary (\b) ensures "march" stays "march" (not "marchch").
   s = s.replace(/\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\b/g,
     m => monthMap[m] || m);
-  // Remove ordinal suffixes: 8th→8, 1st→1, 22nd→22
+
+  // Strip ordinal suffixes: 8th→8, 1st→1, 22nd→22, 3rd→3
   s = s.replace(/\b(\d+)(st|nd|rd|th)\b/g, '$1');
-  // Strip all non-alphanumeric
+
+  // Strip everything that isn't a letter or digit
   s = s.replace(/[^a-z0-9]/g, '');
+
   return s;
 }
 
-// ─── Parse datetime: handles multiple date formats ───────────────────────────
-// Supported:
-//   DD-MM-YYYY HH:MM       (payment report CreatedAt)  e.g. 14-03-2026 23:26
-//   DD/MM/YYYY HH:MM:SS    (batch sheet from/to)       e.g. 14/03/2026 00:00:00
-//   YYYY-MM-DD HH:MM       (ISO)                       e.g. 2026-03-14 23:26
+// ─── parseDatetime ────────────────────────────────────────────────────────────
 function parseDatetime(str) {
   if (!str) return null;
   str = str.toString().trim();
-
   let day, mon, yr, hr = 0, min = 0, sec = 0;
 
-  // Format A: YYYY-MM-DD ... (year is 4 digits at start)
   const isoM = str.match(/^(\d{4})[\-\/](\d{1,2})[\-\/](\d{1,2})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?)?/);
   if (isoM && parseInt(isoM[1]) > 1900) {
-    yr  = parseInt(isoM[1]);
-    mon = parseInt(isoM[2]) - 1;
-    day = parseInt(isoM[3]);
-    hr  = parseInt(isoM[4] || 0);
-    min = parseInt(isoM[5] || 0);
-    sec = parseInt(isoM[6] || 0);
-    const d = new Date(yr, mon, day, hr, min, sec);
+    yr = parseInt(isoM[1]); mon = parseInt(isoM[2])-1; day = parseInt(isoM[3]);
+    hr = parseInt(isoM[4]||0); min = parseInt(isoM[5]||0); sec = parseInt(isoM[6]||0);
+    const d = new Date(yr,mon,day,hr,min,sec);
     if (!isNaN(d.getTime())) return d;
   }
 
-  // Format B: DD-MM-YYYY or DD/MM/YYYY (day first, year is 4 digits at end)
-  // Key rule: first segment (day) can be 1-31, second segment (month) must be 1-12
   const dmyM = str.match(/^(\d{1,2})[\-\/](\d{1,2})[\-\/](\d{4})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?)?/);
   if (dmyM) {
-    const d1 = parseInt(dmyM[1]); // could be day
-    const d2 = parseInt(dmyM[2]); // could be month
-    yr  = parseInt(dmyM[3]);
-    hr  = parseInt(dmyM[4] || 0);
-    min = parseInt(dmyM[5] || 0);
-    sec = parseInt(dmyM[6] || 0);
-
-    // If first number > 12, it must be the day (can't be month)
-    // If second number > 12, it must be the day → swap (MM-DD format)
-    if (d1 > 12) {
-      // Definitely DD-MM-YYYY
-      day = d1; mon = d2 - 1;
-    } else if (d2 > 12) {
-      // Definitely MM-DD-YYYY (unusual but handle it)
-      mon = d1 - 1; day = d2;
-    } else {
-      // Ambiguous: assume DD-MM-YYYY (Indian format used in this app)
-      day = d1; mon = d2 - 1;
-    }
-    const d = new Date(yr, mon, day, hr, min, sec);
+    const d1=parseInt(dmyM[1]), d2=parseInt(dmyM[2]);
+    yr=parseInt(dmyM[3]); hr=parseInt(dmyM[4]||0); min=parseInt(dmyM[5]||0); sec=parseInt(dmyM[6]||0);
+    if (d1>12)      { day=d1; mon=d2-1; }
+    else if (d2>12) { mon=d1-1; day=d2; }
+    else            { day=d1; mon=d2-1; }
+    const d=new Date(yr,mon,day,hr,min,sec);
     if (!isNaN(d.getTime())) return d;
   }
-
   return null;
 }
 
-// ─── Phone parsing ────────────────────────────────────────────────────────────
+// ─── parsePhone ───────────────────────────────────────────────────────────────
 function parsePhone(raw) {
   if (!raw) return { countryCode: '', phone: '' };
-  // Strip quotes, plus, spaces
-  let cleaned = raw.toString().replace(/['\+\s"]/g, '').trim();
-  // Handle scientific notation (e.g. 9.17504E+11)
-  if (/^\d+\.?\d*[eE][+\-]?\d+$/.test(cleaned) || cleaned.includes('E') || cleaned.includes('e')) {
+  let cleaned = raw.toString().replace(/['\+\s"]/g,'').trim();
+  if (/^\d+\.?\d*[eE][+\-]?\d+$/.test(cleaned)||cleaned.includes('E')||cleaned.includes('e')) {
     try { cleaned = Math.round(Number(raw.toString().replace(/['"]/g,''))).toString(); } catch(e) {}
   }
-  // Try libphonenumber
   try {
-    if (window.libphonenumber && cleaned.length >= 10) {
-      const parsed = window.libphonenumber.parsePhoneNumber('+' + cleaned);
+    if (window.libphonenumber && cleaned.length>=10) {
+      const parsed = window.libphonenumber.parsePhoneNumber('+'+cleaned);
       if (parsed && parsed.isValid()) {
         return { countryCode: String(parsed.countryCallingCode), phone: String(parsed.nationalNumber) };
       }
     }
   } catch(e) {}
-  // Fallback rules by length/prefix
-  if (cleaned.length === 12 && cleaned.startsWith('91')) return { countryCode: '91', phone: cleaned.slice(2) };
-  if (cleaned.length === 11 && cleaned.startsWith('1'))  return { countryCode: '1',  phone: cleaned.slice(1) };
-  if (cleaned.length === 12 && cleaned.startsWith('44')) return { countryCode: '44', phone: cleaned.slice(2) };
-  if (cleaned.length === 12 && cleaned.startsWith('61')) return { countryCode: '61', phone: cleaned.slice(2) };
-  if (cleaned.length === 12 && cleaned.startsWith('65')) return { countryCode: '65', phone: cleaned.slice(2) };
-  return { countryCode: '', phone: cleaned };
+  if (cleaned.length===12&&cleaned.startsWith('91')) return { countryCode:'91', phone:cleaned.slice(2) };
+  if (cleaned.length===11&&cleaned.startsWith('1'))  return { countryCode:'1',  phone:cleaned.slice(1) };
+  if (cleaned.length===12&&cleaned.startsWith('44')) return { countryCode:'44', phone:cleaned.slice(2) };
+  if (cleaned.length===12&&cleaned.startsWith('61')) return { countryCode:'61', phone:cleaned.slice(2) };
+  if (cleaned.length===12&&cleaned.startsWith('65')) return { countryCode:'65', phone:cleaned.slice(2) };
+  return { countryCode:'', phone:cleaned };
 }
 
-// ─── Parse batch CSV (no header) to get all groups ───────────────────────────
+// ─── parseBatchRaw ────────────────────────────────────────────────────────────
 function parseBatchRaw(data) {
-  // data is array of arrays (header:false)
   const groups = [];
   data.forEach(row => {
-    const label = (row[0] || '').toString().trim();
-    const fromStr = (row[1] || '').toString().trim();
-    const toStr   = (row[2] || '').toString().trim();
+    const label   = (row[0]||'').toString().trim();
+    const fromStr = (row[1]||'').toString().trim();
+    const toStr   = (row[2]||'').toString().trim();
     if (!label) return;
-    // Must end in G<number> or G<number>-<suffix>
     if (!/\bG\d[\d\-]*/i.test(label)) return;
-    // Extract group ID = last token matching G\d
     const tokens = label.split(/\s+/);
-    const groupPart = tokens[tokens.length - 1];
+    const groupPart = tokens[tokens.length-1];
     if (!/^G\d/i.test(groupPart)) return;
     const fromDt = parseDatetime(fromStr);
     const toDt   = parseDatetime(toStr);
-    // Allow rows with no dates (e.g. last row like "15th March G2" with no "to")
     groups.push({
-      label,
-      groupId: groupPart.toUpperCase(),
-      from: fromDt,
-      to: toDt,
-      fromRaw: fromStr,
-      toRaw: toStr
+      label, groupId: groupPart.toUpperCase(),
+      from: fromDt, to: toDt, fromRaw: fromStr, toRaw: toStr
     });
   });
   return groups;
 }
 
-// ─── Parse batch CSV to detect groups & render UI ────────────────────────────
+// ─── filterGroupsByDate ───────────────────────────────────────────────────────
+// Uses normalizeLabel on BOTH the user's workshopDate input and the batch
+// group labels. Because normalizeLabel expands "Mar" → "march" on both sides
+// before stripping non-alphanumeric, "Mar" and "March" become identical tokens
+// and will always match each other.
+function filterGroupsByDate(allGroups, workshopDate) {
+  if (!workshopDate) return allGroups;
+  const kw = normalizeLabel(workshopDate); // e.g. "8march", "15march"
+  return allGroups.filter(g => {
+    const lc = normalizeLabel(g.label);  // batch label also normalized
+    return lc.includes(kw);
+  });
+}
+
+// ─── parseBatchForGroups ──────────────────────────────────────────────────────
 function parseBatchForGroups() {
   const file = document.getElementById('batchFile').files[0];
   if (!file) return;
   Papa.parse(file, {
-    header: false,
-    skipEmptyLines: true,
+    header: false, skipEmptyLines: true,
     complete: function(results) {
       const allGroups = parseBatchRaw(results.data);
-      // Filter by workshop date if entered
       const workshopDate = document.getElementById('workshopDate').value.trim();
       let matched = filterGroupsByDate(allGroups, workshopDate);
-      if (matched.length === 0) matched = allGroups; // show all if no match
+      if (matched.length===0) matched = allGroups;
       detectedGroups = matched;
-      if (detectedGroups.length > 0) {
-        document.getElementById('groupsSection').style.display = 'block';
+      if (detectedGroups.length>0) {
+        document.getElementById('groupsSection').style.display='block';
         renderGroupsUI();
       }
     }
   });
 }
 
-// ─── Filter groups by workshop date string ────────────────────────────────────
-function filterGroupsByDate(allGroups, workshopDate) {
-  if (!workshopDate) return allGroups;
-  const kw = normalizeLabel(workshopDate); // e.g. "8march" or "8thMarch" → "8march"
-  return allGroups.filter(g => {
-    const lc = normalizeLabel(g.label);
-    return lc.includes(kw);
-  });
-}
-
 function renderGroupsUI() {
-  const container = document.getElementById('groupsContainer');
+  const container  = document.getElementById('groupsContainer');
   const defaultName = document.getElementById('defaultGroupName').value.trim();
   container.innerHTML = '';
-  detectedGroups.forEach((g, i) => {
-    // Replace GX (case-insensitive) with actual group ID
-    const waName = defaultName ? defaultName.replace(/GX/gi, g.groupId) : g.groupId;
+  detectedGroups.forEach((g,i) => {
+    const waName   = defaultName ? defaultName.replace(/GX/gi, g.groupId) : g.groupId;
     const fromLabel = g.fromRaw || '—';
     const toLabel   = g.toRaw   || '—';
     container.innerHTML += `
@@ -1014,8 +1075,8 @@ function renderGroupsUI() {
   });
 }
 
-function toggleDiffInput(type, idx) {
-  const key = type === 'zoom' ? 'Zoom' : 'Webinar';
+function toggleDiffInput(type,idx) {
+  const key = type==='zoom' ? 'Zoom' : 'Webinar';
   const cb  = document.getElementById(`diff${key}_${idx}`);
   const div = document.getElementById(`diff${key}Input_${idx}`);
   if (div) div.classList.toggle('show', cb.checked);
@@ -1035,28 +1096,25 @@ function log(msg, type='info') {
 
 function setProgress(pct) {
   document.getElementById('progressWrap').classList.add('show');
-  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('progressBar').style.width = pct+'%';
 }
 
 function showAlert(msg, type='error') {
-  const box = document.getElementById('alertBox');
-  box.innerHTML = `<div class="alert ${type}">${msg}</div>`;
+  document.getElementById('alertBox').innerHTML = `<div class="alert ${type}">${msg}</div>`;
 }
 
-// ─── Main Generate ────────────────────────────────────────────────────────────
+// ─── MAIN GENERATE ────────────────────────────────────────────────────────────
 async function generate() {
-  // Clear previous state
-  document.getElementById('logBox').innerHTML = '';
+  document.getElementById('logBox').innerHTML='';
   document.getElementById('logBox').classList.remove('show');
-  document.getElementById('alertBox').innerHTML = '';
-  document.getElementById('resultsSection').style.display = 'none';
-  document.getElementById('resultsGrid').innerHTML = '';
+  document.getElementById('alertBox').innerHTML='';
+  document.getElementById('resultsSection').style.display='none';
+  document.getElementById('resultsGrid').innerHTML='';
   document.getElementById('dlAllBtn').classList.remove('show');
   document.getElementById('dlCombinedBtn').classList.remove('show');
   generatedFiles = {};
   setProgress(0);
 
-  // Validate inputs
   const funnel           = document.getElementById('funnelSelect').value;
   const workshopDate     = document.getElementById('workshopDate').value.trim();
   const workshopTime     = document.getElementById('workshopTime').value.trim();
@@ -1072,28 +1130,27 @@ async function generate() {
   if (!batchFile)        { showAlert('Please upload the batch change sheet CSV.'); return; }
 
   const btn = document.getElementById('genBtn');
-  btn.disabled = true;
-  btn.textContent = '⏳ Processing...';
+  btn.disabled=true; btn.textContent='⏳ Processing...';
 
-  log(`Funnel: ${funnel} | Date: ${workshopDate} | Time: ${workshopTime}`);
+  const funnelConfig = FUNNEL_CONFIG[funnel];
+  log(`Funnel: ${funnel} (${funnelConfig.label}) | Date: ${workshopDate} | Time: ${workshopTime}`);
+  log(`Slug conditions: ${funnelConfig.slugConditions.map(c=>`${c.type}:${c.value}`).join(' OR ')} | Amount < ${funnelConfig.amountMax}`);
   setProgress(10);
 
-  // ── Parse files ──
   let paymentData, batchRawData;
   try {
     paymentData  = await parseCSVWithHeader(paymentFile);
     batchRawData = await parseCSVNoHeader(batchFile);
   } catch(e) {
     showAlert('Error reading CSV files: ' + e.message);
-    btn.disabled = false; btn.textContent = '⚡ Generate WATI CSVs'; return;
+    btn.disabled=false; btn.textContent='⚡ Generate WATI CSVs'; return;
   }
 
   log(`Payment report: ${paymentData.length} total rows`);
   log(`Batch sheet raw rows: ${batchRawData.length}`);
   setProgress(20);
 
-  // ── Detect column headers in payment report (flexible) ──
-  const paymentHeaders = Object.keys(paymentData[0] || {});
+  const paymentHeaders = Object.keys(paymentData[0]||{});
   const findCol = (...keywords) => paymentHeaders.find(h => {
     const lh = h.toLowerCase().replace(/[\s_]/g,'');
     return keywords.some(kw => lh.includes(kw));
@@ -1107,11 +1164,10 @@ async function generate() {
   const phoneCol   = findCol('phonenumber','phone');
   const ageCol     = findCol('agegroup','age');
 
-  log(`Columns → Slug:${slugCol} | Status:${statusCol} | CreatedAt:${createdCol} | Phone:${phoneCol} | Age:${ageCol}`);
+  log(`Columns → Slug:${slugCol} | Status:${statusCol} | CreatedAt:${createdCol} | Amount:${amountCol} | Phone:${phoneCol}`);
 
   if (!slugCol) {
-    // Check if user accidentally uploaded batch sheet as payment report
-    const looksLikeBatch = paymentHeaders.some(h => h.toLowerCase().includes('from') || h.toLowerCase().includes('done by'));
+    const looksLikeBatch = paymentHeaders.some(h => h.toLowerCase().includes('from')||h.toLowerCase().includes('done by'));
     if (looksLikeBatch) {
       showAlert('❌ It looks like you uploaded the Batch Change Sheet where the Payment Report should be. Please swap the files.');
     } else {
@@ -1119,45 +1175,56 @@ async function generate() {
     }
     btn.disabled=false; btn.textContent='⚡ Generate WATI CSVs'; return;
   }
-  if (!statusCol)  { showAlert('Cannot find Status column.'); btn.disabled=false; btn.textContent='⚡ Generate WATI CSVs'; return; }
+  if (!statusCol)  { showAlert('Cannot find Status column.');    btn.disabled=false; btn.textContent='⚡ Generate WATI CSVs'; return; }
   if (!createdCol) { showAlert('Cannot find CreatedAt column.'); btn.disabled=false; btn.textContent='⚡ Generate WATI CSVs'; return; }
+  if (!amountCol)  { log('Amount column not found — amount filter will be skipped', 'warn'); }
   setProgress(30);
 
-  // ── Filter: slug (condition-based) ──
-  let filtered = paymentData.filter(row =>
-    slugMatchesFunnel((row[slugCol] || '').toString(), funnel)
-  );
-  log(`After slug filter: ${filtered.length} rows`, filtered.length > 0 ? 'ok' : 'warn');
+  // ── Filter: slug match + amount threshold ──
+  let filtered = paymentData.filter(row => {
+    const slug   = (row[slugCol]   || '').toString();
+    const amount = amountCol ? (row[amountCol] || '').toString() : '0';
+    return rowMatchesFunnel(slug, amount, funnel);
+  });
+  log(`After slug+amount filter: ${filtered.length} rows`, filtered.length>0?'ok':'warn');
+
+  // ── Log dropped rows (slug matched but amount too high) ──
+  if (isFinite(funnelConfig.amountMax)) {
+    const slugOnly = paymentData.filter(row => {
+      const slug = (row[slugCol]||'').toString().toLowerCase().trim();
+      return funnelConfig.slugConditions.some(c =>
+        c.type==='exact' ? slug===c.value : slug.includes(c.value)
+      );
+    });
+    const droppedAmt = slugOnly.length - filtered.length;
+    if (droppedAmt > 0) log(`Dropped ${droppedAmt} rows: slug matched but amount ≥ ${funnelConfig.amountMax}`, 'warn');
+  }
 
   // ── Filter: status = captured ──
-  const failedRows = paymentData.filter(row =>
-    slugMatchesFunnel((row[slugCol] || '').toString(), funnel) &&
-    (row[statusCol] || '').toString().toLowerCase().trim() !== 'captured'
+  const failedRows = filtered.filter(row =>
+    (row[statusCol]||'').toString().toLowerCase().trim() !== 'captured'
   );
-  log(`Slug-matched but status != captured (dropped): ${failedRows.length} rows`, failedRows.length > 0 ? 'warn' : 'ok');
-
+  log(`Status != captured (dropped): ${failedRows.length} rows`, failedRows.length>0?'warn':'ok');
   filtered = filtered.filter(row =>
-    (row[statusCol] || '').toString().toLowerCase().trim() === 'captured'
+    (row[statusCol]||'').toString().toLowerCase().trim() === 'captured'
   );
-  log(`After status=captured filter: ${filtered.length} rows`, filtered.length > 0 ? 'ok' : 'warn');
+  log(`After status=captured filter: ${filtered.length} rows`, filtered.length>0?'ok':'warn');
   setProgress(45);
 
   // ── Parse batch sheet ──
   const allBatchGroups = parseBatchRaw(batchRawData);
   log(`All batch groups parsed: ${allBatchGroups.map(g=>g.label).join(' | ')}`);
 
-  // ── Match groups to workshop date ──
   let relevantGroups = filterGroupsByDate(allBatchGroups, workshopDate);
-  if (relevantGroups.length === 0) {
+  if (relevantGroups.length===0) {
     log(`No groups matched "${workshopDate}" — trying all groups`, 'warn');
-    relevantGroups = allBatchGroups.filter(g => g.from && g.to);
+    relevantGroups = allBatchGroups.filter(g=>g.from&&g.to);
   } else {
     log(`Groups for "${workshopDate}": ${relevantGroups.map(g=>g.label).join(', ')}`, 'ok');
   }
 
-  // Keep only groups that have at least a "from" date
-  const maxPossibleDate = new Date(8640000000000000); // far future
-  relevantGroups = relevantGroups.filter(g => g.from);
+  const maxPossibleDate = new Date(8640000000000000);
+  relevantGroups = relevantGroups.filter(g=>g.from);
   relevantGroups = relevantGroups.map(g => {
     if (!g.to) {
       log(`Group ${g.groupId} has no closing date — using max date (open batch)`, 'warn');
@@ -1166,71 +1233,55 @@ async function generate() {
     return g;
   });
 
-  if (relevantGroups.length === 0) {
+  if (relevantGroups.length===0) {
     showAlert('Could not find matching groups with valid date ranges in batch sheet. Check your workshop date format (e.g. "8th March").');
     btn.disabled=false; btn.textContent='⚡ Generate WATI CSVs'; return;
   }
   setProgress(55);
 
-  // ── Filter payment rows to date range ──
-  // Log each group's from/to for debugging
   relevantGroups.forEach(g => {
-    log(`Group ${g.groupId}: from=${g.from ? g.from.toLocaleString() : 'NULL'} | to=${g.to ? g.to.toLocaleString() : 'NULL'} | rawFrom="${g.fromRaw}" | rawTo="${g.toRaw}"`);
+    log(`Group ${g.groupId}: from=${g.from?g.from.toLocaleString():'NULL'} | to=${g.to?g.to.toLocaleString():'NULL'}`);
   });
 
-  const minDate = new Date(Math.min(...relevantGroups.map(g => g.from.getTime())));
-  const maxDate = new Date(Math.max(...relevantGroups.map(g => g.to.getTime())));
+  const minDate = new Date(Math.min(...relevantGroups.map(g=>g.from.getTime())));
+  const maxDate = new Date(Math.max(...relevantGroups.map(g=>g.to.getTime())));
   log(`Overall date range: ${minDate.toLocaleString()} → ${maxDate.toLocaleString()}`);
 
-  // Log sample CreatedAt values from payment report
-  const sampleDates = filtered.slice(0, 5).map(r => {
-    const raw = (r[createdCol] || '').toString();
+  const sampleDates = filtered.slice(0,5).map(r => {
+    const raw = (r[createdCol]||'').toString();
     const parsed = parseDatetime(raw);
-    return `"${raw}" → ${parsed ? parsed.toLocaleString() : 'NULL'}`;
+    return `"${raw}" → ${parsed?parsed.toLocaleString():'NULL'}`;
   });
   log(`Sample CreatedAt parsing: ${sampleDates.join(' | ')}`, 'info');
 
   const beforeCount = filtered.length;
   filtered = filtered.filter(row => {
-    const dt = parseDatetime((row[createdCol] || '').toString());
+    const dt = parseDatetime((row[createdCol]||'').toString());
     if (!dt) return false;
     return dt >= minDate && dt < maxDate;
   });
-  log(`After date range filter: ${beforeCount} → ${filtered.length} rows`, filtered.length > 0 ? 'ok' : 'warn');
-
-  if (filtered.length === 0) {
-    const samples = filtered.slice(0,3).map(r => r[createdCol]).join(' | ');
-    log(`No rows matched the date range. Min: ${minDate.toLocaleString()} Max: ${maxDate.toLocaleString()}`, 'warn');
-    log(`Check: are payment dates within this window?`, 'warn');
-  }
+  log(`After date range filter: ${beforeCount} → ${filtered.length} rows`, filtered.length>0?'ok':'warn');
   setProgress(65);
 
   // ── Assign rows to groups ──
   const grouped = {};
-  relevantGroups.forEach(g => { grouped[g.groupId] = []; });
-  let unassigned = 0;
-  let nullDate = 0;
-  let outsideRange = 0;
+  relevantGroups.forEach(g => { grouped[g.groupId]=[]; });
+  let unassigned=0, nullDate=0, outsideRange=0;
 
   filtered.forEach(row => {
-    const rawDt = (row[createdCol] || '').toString();
-    const dt = parseDatetime(rawDt);
+    const dt = parseDatetime((row[createdCol]||'').toString());
     if (!dt) { nullDate++; unassigned++; return; }
     let assigned = false;
     for (const g of relevantGroups) {
-      if (dt >= g.from && dt < g.to) {
-        grouped[g.groupId].push(row);
-        assigned = true;
-        break;
-      }
+      if (dt>=g.from && dt<g.to) { grouped[g.groupId].push(row); assigned=true; break; }
     }
     if (!assigned) { outsideRange++; unassigned++; }
   });
 
-  if (nullDate > 0)      log(`${nullDate} rows dropped — CreatedAt could not be parsed`, 'warn');
-  if (outsideRange > 0)  log(`${outsideRange} rows dropped — CreatedAt outside all group date windows`, 'warn');
-  if (unassigned > 0)    log(`Total dropped: ${unassigned} rows`, 'warn');
-  else                   log(`All rows assigned successfully`, 'ok');
+  if (nullDate>0)     log(`${nullDate} rows dropped — CreatedAt could not be parsed`, 'warn');
+  if (outsideRange>0) log(`${outsideRange} rows dropped — outside all group windows`, 'warn');
+  if (unassigned>0)   log(`Total dropped: ${unassigned} rows`, 'warn');
+  else                log('All rows assigned successfully', 'ok');
   relevantGroups.forEach(g => log(`${g.groupId} (${g.label}): ${grouped[g.groupId].length} records`, 'ok'));
   setProgress(78);
 
@@ -1238,38 +1289,36 @@ async function generate() {
   const defaultZoom    = document.getElementById('defaultZoomLink').value.trim();
   const defaultWebinar = document.getElementById('defaultWebinarId').value.trim();
   const resultsGrid    = document.getElementById('resultsGrid');
-  document.getElementById('resultsSection').style.display = 'block';
+  document.getElementById('resultsSection').style.display='block';
 
-  relevantGroups.forEach((g, i) => {
-    const rows   = grouped[g.groupId] || [];
-    // Replace GX with actual group ID in the default name
+  relevantGroups.forEach((g,i) => {
+    const rows   = grouped[g.groupId]||[];
     const waName = defaultGroupName.replace(/GX/gi, g.groupId);
 
-    // Per-group overrides
     const diffZoomCb    = document.getElementById(`diffZoom_${i}`);
     const diffWebinarCb = document.getElementById(`diffWebinar_${i}`);
-    const zoomLink  = (diffZoomCb && diffZoomCb.checked)    ? (document.getElementById(`zoomLink_${i}`)?.value?.trim()   || defaultZoom)    : defaultZoom;
-    const webinarId = (diffWebinarCb && diffWebinarCb.checked) ? (document.getElementById(`webinarId_${i}`)?.value?.trim() || defaultWebinar) : defaultWebinar;
+    const zoomLink  = (diffZoomCb&&diffZoomCb.checked)    ? (document.getElementById(`zoomLink_${i}`)?.value?.trim()   ||defaultZoom)    : defaultZoom;
+    const webinarId = (diffWebinarCb&&diffWebinarCb.checked) ? (document.getElementById(`webinarId_${i}`)?.value?.trim() ||defaultWebinar) : defaultWebinar;
 
     const watiRows = rows.map(row => {
-      const phoneRaw = (row[phoneCol] || '').toString();
+      const phoneRaw = (row[phoneCol]||'').toString();
       const { countryCode, phone } = parsePhone(phoneRaw);
       return {
-        Name:            ((row[nameCol]    || '').toString().trim()) || 'User',
-        CountryCode:     countryCode,
-        Phone:           phone,
-        AllowBroadcast:  'TRUE',
-        AllowSMS:        'TRUE',
-        email:           (row[emailCol]   || '').toString().trim(),
-        amount:          (row[amountCol]  || '').toString().trim(),
-        'Amount Date':   (row[createdCol] || '').toString().trim(),
-        Age:             (row[ageCol]     || '').toString().trim(),
-        date:            workshopDate,
-        time:            workshopTime,
-        batch:           funnel,
-        whatsapp_link:   waName,
-        zoom_link:       zoomLink,
-        webinar_id:      webinarId
+        Name:           ((row[nameCol]||'').toString().trim())||'User',
+        CountryCode:    countryCode,
+        Phone:          phone,
+        AllowBroadcast: 'TRUE',
+        AllowSMS:       'TRUE',
+        email:          (row[emailCol]  ||'').toString().trim(),
+        amount:         (row[amountCol] ||'').toString().trim(),
+        'Amount Date':  (row[createdCol]||'').toString().trim(),
+        Age:            (row[ageCol]    ||'').toString().trim(),
+        date:           workshopDate,
+        time:           workshopTime,
+        batch:          funnel,
+        whatsapp_link:  waName,
+        zoom_link:      zoomLink,
+        webinar_id:     webinarId
       };
     });
 
@@ -1293,29 +1342,19 @@ async function generate() {
   log(`✅ Done! Generated ${relevantGroups.length} WATI CSV files.`, 'ok');
   document.getElementById('dlAllBtn').classList.add('show');
   document.getElementById('dlCombinedBtn').classList.add('show');
-  btn.disabled = false;
-  btn.textContent = '⚡ Generate WATI CSVs';
+  btn.disabled=false; btn.textContent='⚡ Generate WATI CSVs';
   showAlert(`✅ Successfully generated ${relevantGroups.length} WATI CSV files!`, 'success');
 }
 
-// ─── CSV Parsing helpers ──────────────────────────────────────────────────────
+// ─── CSV helpers ──────────────────────────────────────────────────────────────
 function parseCSVWithHeader(file) {
-  return new Promise((resolve, reject) => {
-    Papa.parse(file, {
-      header: true, skipEmptyLines: true,
-      complete: r => resolve(r.data),
-      error: e => reject(e)
-    });
+  return new Promise((resolve,reject) => {
+    Papa.parse(file, { header:true, skipEmptyLines:true, complete:r=>resolve(r.data), error:e=>reject(e) });
   });
 }
-
 function parseCSVNoHeader(file) {
-  return new Promise((resolve, reject) => {
-    Papa.parse(file, {
-      header: false, skipEmptyLines: true,
-      complete: r => resolve(r.data),
-      error: e => reject(e)
-    });
+  return new Promise((resolve,reject) => {
+    Papa.parse(file, { header:false, skipEmptyLines:true, complete:r=>resolve(r.data), error:e=>reject(e) });
   });
 }
 
@@ -1323,39 +1362,37 @@ function parseCSVNoHeader(file) {
 function downloadFile(filename) {
   const csv = generatedFiles[filename];
   if (!csv) return;
-  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const blob = new Blob(['\uFEFF'+csv], { type:'text/csv;charset=utf-8;' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url; a.download = filename; a.click();
+  a.href=url; a.download=filename; a.click();
   URL.revokeObjectURL(url);
 }
 
 async function downloadAll() {
   const zip = new JSZip();
-  Object.entries(generatedFiles).forEach(([name, csv]) => zip.file(name, '\uFEFF' + csv));
-  const blob = await zip.generateAsync({ type: 'blob' });
+  Object.entries(generatedFiles).forEach(([name,csv]) => zip.file(name,'\uFEFF'+csv));
+  const blob = await zip.generateAsync({ type:'blob' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url; a.download = 'wati_files.zip'; a.click();
+  a.href=url; a.download='wati_files.zip'; a.click();
   URL.revokeObjectURL(url);
 }
 
 function downloadCombined() {
   const files = Object.values(generatedFiles);
   if (!files.length) return;
-  // Parse each CSV, skip header for all but first, then rejoin
-  let combinedRows = [];
-  let headers = null;
-  files.forEach((csv, idx) => {
-    const parsed = Papa.parse(csv, { header: true, skipEmptyLines: true });
-    if (idx === 0) headers = parsed.meta.fields;
+  let combinedRows=[], headers=null;
+  files.forEach((csv,idx) => {
+    const parsed = Papa.parse(csv,{header:true,skipEmptyLines:true});
+    if (idx===0) headers=parsed.meta.fields;
     combinedRows = combinedRows.concat(parsed.data);
   });
-  const combinedCsv = Papa.unparse(combinedRows, { fields: headers });
-  const blob = new Blob(['\uFEFF' + combinedCsv], { type: 'text/csv;charset=utf-8;' });
+  const combinedCsv = Papa.unparse(combinedRows,{fields:headers});
+  const blob = new Blob(['\uFEFF'+combinedCsv],{type:'text/csv;charset=utf-8;'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url; a.download = 'wati_combined_all_groups.csv'; a.click();
+  a.href=url; a.download='wati_combined_all_groups.csv'; a.click();
   URL.revokeObjectURL(url);
 }
 
@@ -1367,32 +1404,30 @@ function downloadSampleBatch() {
 8th March G3,07/03/2026 18:00:00,08/03/2026 00:00:00
 15th March G2,08/03/2026 00:00:00,14/03/2026 18:00:00
 15th March G3,14/03/2026 18:00:00,15/03/2026 00:00:00`;
-  const blob = new Blob([csv], { type: 'text/csv' });
+  const blob = new Blob([csv],{type:'text/csv'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url; a.download = 'batch_change_sheet_sample.csv'; a.click();
+  a.href=url; a.download='batch_change_sheet_sample.csv'; a.click();
   URL.revokeObjectURL(url);
 }
 
 // ─── Drag & drop ──────────────────────────────────────────────────────────────
 ['paymentDrop','batchDrop'].forEach(id => {
   const el = document.getElementById(id);
-  el.addEventListener('dragover', e => { e.preventDefault(); el.classList.add('dragover'); });
-  el.addEventListener('dragleave', () => el.classList.remove('dragover'));
-  el.addEventListener('drop', e => {
+  el.addEventListener('dragover', e=>{ e.preventDefault(); el.classList.add('dragover'); });
+  el.addEventListener('dragleave', ()=>el.classList.remove('dragover'));
+  el.addEventListener('drop', e=>{
     e.preventDefault(); el.classList.remove('dragover');
-    const type = id === 'paymentDrop' ? 'payment' : 'batch';
-    const input = document.getElementById(type === 'payment' ? 'paymentFile' : 'batchFile');
+    const type = id==='paymentDrop' ? 'payment' : 'batch';
+    const input = document.getElementById(type==='payment'?'paymentFile':'batchFile');
     input.files = e.dataTransfer.files;
     onFileSelect(type);
   });
 });
 
-// Re-detect groups when date input changes
-document.getElementById('workshopDate').addEventListener('input', () => {
+document.getElementById('workshopDate').addEventListener('input', ()=>{
   if (document.getElementById('batchFile').files[0]) parseBatchForGroups();
 });
-
 </script>
 </body>
 </html>
